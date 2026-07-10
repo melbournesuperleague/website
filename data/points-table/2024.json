@@ -1,0 +1,20 @@
+{
+  "_comment": "Source: MSL Premiers points table (CricHeroes tournament 1217667), league-phase snapshot. 'runsFor'/'runsAgainst' are runs/overs scored and conceded — CricHeroes prints these under its 'For'/'Against' columns and leaves its 'Quotient' column blank. To update after new results, edit the numbers below or re-export from CricHeroes — see docs/CONTENT-GUIDE.md.",
+  "season": "2024",
+  "competition": "MSL Premiers — League Matches",
+  "lastUpdated": "2026-07-03",
+  "sourceUrl": "https://cricheroes.com/tournament/1217667/msl-premiers/points-table",
+  "groups": [
+    {
+      "name": "League Matches",
+      "standings": [
+        { "rank": 1, "team": "melbourne-thunders", "played": 5, "won": 4, "lost": 1, "drawn": 0, "tied": 0, "noResult": 0, "nrr": 0.094, "runsFor": "858/99.5", "runsAgainst": "850/100", "points": 8, "form": ["W", "W", "L", "W", "W"] },
+        { "rank": 2, "team": "melbourne-pirates", "played": 5, "won": 3, "lost": 2, "drawn": 0, "tied": 0, "noResult": 0, "nrr": 0.508, "runsFor": "851/95.1", "runsAgainst": "842/99.5", "points": 6, "form": ["L", "W", "W", "W", "L"] },
+        { "rank": 3, "team": "melbourne-bulls", "played": 5, "won": 3, "lost": 2, "drawn": 0, "tied": 0, "noResult": 0, "nrr": 0.288, "runsFor": "849/99.3", "runsAgainst": "797/96.4", "points": 6, "form": ["W", "L", "W", "L", "W"] },
+        { "rank": 4, "team": "auscon-melbourne-united", "played": 5, "won": 2, "lost": 3, "drawn": 0, "tied": 0, "noResult": 0, "nrr": 0.298, "runsFor": "831/98.1", "runsAgainst": "799/97.5", "points": 4, "form": ["W", "L", "L", "W", "L"] },
+        { "rank": 5, "team": "melbourne-tuskers", "played": 5, "won": 2, "lost": 3, "drawn": 0, "tied": 0, "noResult": 0, "nrr": -0.274, "runsFor": "871/96.2", "runsAgainst": "885/95", "points": 4, "form": ["L", "L", "W", "W", "L"] },
+        { "rank": 6, "team": "melbourne-cobras", "played": 5, "won": 1, "lost": 4, "drawn": 0, "tied": 0, "noResult": 0, "nrr": -0.898, "runsFor": "764/100", "runsAgainst": "851/99.4", "points": 2, "form": ["L", "L", "L", "W", "L"] }
+      ]
+    }
+  ]
+}

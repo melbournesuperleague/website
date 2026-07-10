@@ -20,11 +20,10 @@ get-involved.html, contact.html, 404.html   ← the 12 pages
 
 data/                  ← everything editable lives here (JSON)
   site-config.json      global settings, contact info, nav/footer links
-  teams.json             the 6 franchises
-  seasons-index.json     controls the year/season selector
-  points-table/2025-26.json
-  leaderboards/2025-26.json
-  stats/2025-26.json
+  teams.json             every franchise that has played (not per-season)
+  seasons-index.json     controls the year selector
+  points-table/2025.json, points-table/2024.json
+  leaderboards/2025.json, leaderboards/2024.json
   news.json
   gallery.json
   manifest.json          AUTO-GENERATED — don't hand-edit, run `npm run build`
@@ -53,4 +52,4 @@ GitHub → Cloudflare Pages, build command `node scripts/generate-manifests.mjs`
 
 ## Data sources
 
-Points table, batting/bowling/MVP leaderboards (top 5 of each) and tournament stats were sourced from CricHeroes (tournament `MSL Premiers`, id `1217667`) as of the export date noted in each JSON file's `lastUpdated`/`_comment` field. Every leaderboard links out to the live, full CricHeroes leaderboard. Contact phone/email/social handles were sourced from MSL's public Facebook and PlayHQ listings — confirm these are still current and update `data/site-config.json` if not.
+Points table and batting/bowling/MVP leaderboards (top 5 of each) were sourced from CricHeroes: the **2024** season from tournament `MSL Premiers` (id `1217667`), the **2025** season from `MSL Premiers 2025` (id `1729194`). See each JSON file's `lastUpdated`/`_comment` field for the export date. Every leaderboard links out to the live, full CricHeroes leaderboard. Contact phone/email/social handles were sourced from MSL's public Facebook and PlayHQ listings — confirm these are still current and update `data/site-config.json` if not.

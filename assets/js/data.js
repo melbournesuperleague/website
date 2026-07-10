@@ -2,7 +2,7 @@
  * data.js — JSON data layer for the MSL site.
  * ------------------------------------------------------------------
  * Every configurable piece of content (site config, teams, points table,
- * leaderboards, tournament stats, news, gallery) lives in /data/*.json.
+ * leaderboards, news, gallery) lives in /data/*.json.
  * This module fetches + caches that data and exposes small render helpers
  * used by the inline <script type="module"> blocks on each page.
  *
@@ -53,9 +53,19 @@ export async function loadLeaderboards(seasonId) {
   return fetchJSON(season.leaderboards);
 }
 
-export async function loadStats(seasonId) {
-  const season = await getSeasonById(seasonId);
-  return fetchJSON(season.stats);
+/**
+ * A points table is one or more groups (2025 runs Group A / Group B; 2024 was a
+ * single league phase). Older files stored a flat `standings` array — accept both.
+ */
+export function standingsGroups(table) {
+  if (Array.isArray(table?.groups)) return table.groups;
+  if (Array.isArray(table?.standings)) return [{ name: null, standings: table.standings }];
+  return [];
+}
+
+/** Every row across every group, e.g. to look up one team's record. */
+export function allStandings(table) {
+  return standingsGroups(table).flatMap((g) => g.standings);
 }
 
 export async function teamBySlug(slug) {
@@ -82,7 +92,7 @@ export function teamInitials(name) {
 export function teamCrestHTML(team, manifest, sizeClass = "") {
   const logoPath = manifest?.__teamLogos?.[team.slug];
   if (logoPath) {
-    return `<span class="team-crest ${sizeClass}"><img src="${logoPath}" alt="${team.name} logo" loading="lazy"></span>`;
+    return `<span class="team-crest is-logo ${sizeClass}"><img src="${logoPath}" alt="${team.name} logo" loading="lazy"></span>`;
   }
   const bg = team.accent || "var(--msl-violet-500)";
   const fg = team.accentText || "#fff";
@@ -92,7 +102,7 @@ export function teamCrestHTML(team, manifest, sizeClass = "") {
 export function miniCrestHTML(team, manifest) {
   const logoPath = manifest?.__teamLogos?.[team.slug];
   if (logoPath) {
-    return `<span class="mini-crest"><img src="${logoPath}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover"></span>`;
+    return `<span class="mini-crest is-logo"><img src="${logoPath}" alt="" loading="lazy"></span>`;
   }
   const bg = team.accent || "var(--msl-violet-500)";
   const fg = team.accentText || "#fff";

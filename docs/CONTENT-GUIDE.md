@@ -37,84 +37,80 @@ Edit `contact.email`, `contact.phone`, `contact.city`, `contact.facebook`, `cont
 
 Each team is one object with a `name`, `blurb` (short description) and `accent` colour (used for its generated crest). To change a team's name or description, edit it here — it updates everywhere the team appears (Teams page, Standings, leaderboards, footer links).
 
+The Teams page lists every team alphabetically — it deliberately shows no ranking, because the roster spans multiple seasons.
+
 ### Adding a real team logo
-Drop an image into `assets/img/teams/` named **exactly** after the team's `slug`:
+Drop an image into `assets/img/teams/` named **exactly** after the team's `slug`, e.g. `assets/img/teams/melbourne-bulls.png`. See `assets/img/teams/README.md` for the full slug list and which logos are still missing.
 
-```
-assets/img/teams/melbourne-bulls.png
-assets/img/teams/melbourne-pirates.png
-assets/img/teams/melbourne-thunders.png
-assets/img/teams/auscon-melbourne-united.png
-assets/img/teams/melbourne-tuskers.png
-assets/img/teams/melbourne-cobras.png
-```
-
-`.png`, `.jpg` or `.webp` all work. Once it's there (and you've run the build — see §8), the site automatically swaps the generated initials badge for your real logo everywhere. No JSON or code edit required for this part.
+`.png`, `.jpg` or `.webp` all work. Once it's there (and you've run the build — see §9), the site automatically swaps the generated initials badge for your real logo everywhere. No JSON or code edit required for this part.
 
 ---
 
 ## 4. Update the Points Table
 
-**File:** `data/points-table/2025-26.json`
+**Files:** `data/points-table/2025.json` (current), `data/points-table/2024.json`
 
-Each row in `standings` is one team's record for the season:
+A points table is a list of `groups`. 2025 runs two groups of six; 2024 was a single league phase, so it has one group named `"League Matches"` and the site hides the heading when there's only one group.
 
 ```json
-{ "rank": 1, "team": "melbourne-thunders", "played": 5, "won": 4, "lost": 1,
-  "drawn": 0, "tied": 0, "noResult": 0, "nrr": 0.094,
-  "quotient": "858/99.5", "for": "850/100", "points": 8,
-  "form": ["W","W","L","W","W"] }
+{
+  "groups": [
+    {
+      "name": "Group A",
+      "standings": [
+        { "rank": 1, "team": "melbourne-pirates", "played": 5, "won": 3, "lost": 2,
+          "drawn": 0, "tied": 0, "noResult": 0, "nrr": 1.547,
+          "runsFor": "802/91.1", "runsAgainst": "719/99.1", "points": 6,
+          "form": ["L","L","W","W","W"] }
+      ]
+    }
+  ]
+}
 ```
 
-`team` must match a `slug` from `data/teams.json`. `form` is the last-5 results shown as coloured pills (`W`/`L`/`D`/`T`/`N`). Re-order rows by `rank` after every round, or just edit the numbers — the site always displays them in the order they appear in the file, so keep `rank` correct.
+`team` must match a `slug` from `data/teams.json`. `form` is the last-5 results shown as coloured pills (`W`/`L`/`D`/`T`/`N`). Rows display in file order, so keep `rank` correct.
+
+> **On `runsFor` / `runsAgainst`:** CricHeroes' exported points table prints runs-scored and runs-conceded under its `For` and `Against` headings and leaves its `Quotient` column blank. Those two values are what feed NRR (`runsFor` rate minus `runsAgainst` rate), so the site labels them **For** and **Against**.
 
 ---
 
 ## 5. Update the Leaderboards (Batting / Bowling / MVP)
 
-**File:** `data/leaderboards/2025-26.json`
+**Files:** `data/leaderboards/2025.json` (current), `data/leaderboards/2024.json`
 
-Three sections — `batting`, `bowling`, `mvp` — each with a `players` array. The site shows the **top 5** from each list (whatever order they're in the file), with a "View Full Leaderboard on CricHeroes" link driven by `cricheroesUrl`.
+Three sections — `batting`, `bowling`, `mvp` — each with a `players` array. The site shows the **top 5** from each on the Standings page and the **top 3** on the homepage, with a "View Full Leaderboard on CricHeroes" link driven by `cricheroesUrl`.
 
-To refresh after new matches: re-export the leaderboard from CricHeroes and update the numbers, or edit by hand. Keep `team` matching a team `slug`.
-
----
-
-## 6. Update Tournament Stats
-
-**File:** `data/stats/2025-26.json`
-
-The stat strip shown on the Standings page (and a subset on the homepage). Just a label/value list — edit the `value` for any stat, or add a new `{ "label": "...", "value": ... }` entry.
+To refresh after new matches: export the leaderboard CSVs from CricHeroes and update the numbers, or edit by hand. Keep `team` matching a team `slug`.
 
 ---
 
-## 7. Adding a brand-new season / year (e.g. 2026–27)
+## 6. Adding a brand-new season / year (e.g. 2026)
 
-The year selector on the Standings page is driven entirely by `data/seasons-index.json`. To add a new season once next year's competition finishes:
+The year selector on the Standings page and the homepage is driven entirely by `data/seasons-index.json`. To add a new season once next year's competition finishes:
 
-1. Duplicate the three files below and rename them for the new season:
-   - `data/points-table/2025-26.json` → `data/points-table/2026-27.json`
-   - `data/leaderboards/2025-26.json` → `data/leaderboards/2026-27.json`
-   - `data/stats/2025-26.json` → `data/stats/2026-27.json`
+1. Duplicate the two files below and rename them for the new season:
+   - `data/points-table/2025.json` → `data/points-table/2026.json`
+   - `data/leaderboards/2025.json` → `data/leaderboards/2026.json`
 2. Fill each new file in with the new season's numbers.
-3. Add a new entry to `data/seasons-index.json`:
+3. Add a new entry at the **top** of `seasons` in `data/seasons-index.json`:
 
 ```json
 {
-  "id": "2026-27",
-  "label": "MSL Premiers 2026–27",
+  "id": "2026",
+  "label": "2026",
   "isDefault": true,
-  "pointsTable": "data/points-table/2026-27.json",
-  "leaderboards": "data/leaderboards/2026-27.json",
-  "stats": "data/stats/2026-27.json"
+  "pointsTable": "data/points-table/2026.json",
+  "leaderboards": "data/leaderboards/2026.json"
 }
 ```
 
-4. Set `"isDefault": true` on the new season and remove/change it on the old one — this controls which season loads first when someone visits Standings. Old seasons stay selectable in the dropdown forever, so your season history builds up automatically.
+4. Set `"isDefault": true` on the new season and `false` on the old one — this controls which year loads first. Old seasons stay selectable in the dropdown forever, so your season history builds up automatically.
+
+The team roster in `data/teams.json` is **not** per-season: it holds every franchise that has ever played. A team with no row in the selected year's points table simply shows no rank (the Teams page lists everyone alphabetically, with no ranking at all).
 
 ---
 
-## 8. Adding / updating News articles
+## 7. Adding / updating News articles
 
 **File:** `data/news.json`, plus a photo folder per article.
 
@@ -139,7 +135,7 @@ To remove an article, delete its object from `news.json` (you can leave the phot
 
 ---
 
-## 9. Adding / updating Gallery albums
+## 8. Adding / updating Gallery albums
 
 **File:** `data/gallery.json`, plus a photo folder per album.
 
@@ -160,7 +156,7 @@ To remove an article, delete its object from `news.json` (you can leave the phot
 
 ---
 
-## 10. How the "auto photo pickup" actually works
+## 9. How the "auto photo pickup" actually works
 
 Because this is a fully static site (no server, no database), the browser can't "look inside a folder" on its own. So `scripts/generate-manifests.mjs` does it for you ahead of time: it scans every folder under `assets/img/news/` and `assets/img/gallery/`, plus `assets/img/teams/`, and writes the result to `data/manifest.json`. The website reads that file to know which photos exist.
 
@@ -173,7 +169,7 @@ If you forget and photos don't show up yet, that's why — re-run the build.
 
 ---
 
-## 11. Deploying: GitHub + Cloudflare Pages
+## 10. Deploying: GitHub + Cloudflare Pages
 
 1. **Push this folder to a GitHub repository** (create a new repo, e.g. `msl-website`, and push all these files to it — everything except what's listed in `.gitignore`).
 2. **In Cloudflare:** Workers & Pages → Create → Pages → Connect to Git → select your `msl-website` repo.
@@ -188,7 +184,7 @@ If you'd rather host on plain GitHub Pages instead of Cloudflare Pages, that wor
 
 ---
 
-## 12. Editing on-page text (About, MSL Premiers, Get Involved, etc.)
+## 11. Editing on-page text (About, MSL Premiers, Get Involved, etc.)
 
 Most long-form copy (About page story/values, MSL Premiers highlights, Get Involved copy, homepage intro text) is regular HTML inside the page files themselves, since it doesn't change often. To edit it:
 
@@ -200,7 +196,7 @@ The **top navigation menu** is duplicated at the top of every page (standard pra
 
 ---
 
-## 13. The contact form
+## 12. The contact form
 
 The Contact page form currently opens the visitor's email client with the message pre-filled (works with zero setup, since this is a static site with no server). If you'd like submissions to land directly in an inbox or spreadsheet instead, connect a free static-form service — no code changes beyond adding your endpoint:
 
@@ -209,7 +205,7 @@ The Contact page form currently opens the visitor's email client with the messag
 
 ---
 
-## 14. Troubleshooting
+## 13. Troubleshooting
 
 - **A page shows a blank section / spinner forever** — almost always a typo in a `.json` file (missing comma, unmatched quote). Paste the file into [jsonlint.com](https://jsonlint.com) to find the error.
 - **Photos aren't showing up** — did you run the build (`npm run build`) after adding them? See §10.

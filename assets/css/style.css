@@ -109,7 +109,20 @@ p:last-child { margin-bottom: 0; }
 .lede, .section-head p { text-wrap: pretty; }
 
 .container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 20px; }
-.container-narrow { width: 100%; max-width: var(--container-narrow); margin: 0 auto; padding: 0 20px; }
+/* Left edge aligned with .container's left edge (same margin-left) rather
+   than page-centred, so a narrow prose column sits directly under the
+   page-hero heading (which uses .container) instead of floating toward the
+   middle. Centred contexts (.text-center / .empty-state, or any container
+   inside a .text-center section) are re-centred below. */
+.container-narrow {
+  width: 100%; max-width: var(--container-narrow);
+  margin-left: max(0px, calc((100% - var(--container)) / 2));
+  margin-right: auto;
+  padding: 0 20px;
+}
+.container-narrow.text-center,
+.container-narrow.empty-state,
+.text-center .container-narrow { margin-left: auto; }
 @media (min-width: 560px) {
   .container, .container-narrow { padding: 0 24px; }
 }
@@ -247,7 +260,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 @media (prefers-reduced-motion: reduce) {
   .site-header.is-scrolled { animation: none; }
 }
-.site-header .container { display: flex; align-items: center; justify-content: space-between; height: 84px; gap: 12px; }
+/* Wider than the site's default 1256px container (Nitro's header container
+   is ~1800px) so the logo sits near the left edge and the CTA/hamburger
+   near the right edge, instead of pulled toward centre. */
+.site-header .container { display: flex; align-items: center; justify-content: space-between; height: 84px; gap: 12px; max-width: 1800px; }
 /* Logo only — no wordmark next to it, sized up so it carries the header's
    visual weight on its own (Nitro's wordmark logo reads large for the same
    reason: it's the only thing on the left). */
@@ -472,16 +488,19 @@ body.nav-open { overflow: hidden; }
     radial-gradient(760px 460px at 92% -10%, rgba(216,248,76,0.14), transparent 60%);
   pointer-events: none;
 }
-/* Wider than the site's default 1256px container (Nitro's hero container is
-   1720px) so on wide screens the copy sits near the left edge instead of
-   getting pushed toward centre by a narrow centred column. */
+/* On wide screens the hero copy goes full-bleed (max-width:none) with a
+   fluid left inset (clamp), so the text keeps a consistent ~60–120px left
+   margin instead of snapping flush to the 24px gutter at 1440–1720px widths
+   (a fixed 1720px container only margins the text above 1720px, leaving it
+   flush at the most common laptop/desktop widths). */
 .hero-inner { position: relative; z-index: 2; width: 100%; }
-@media (min-width: 1400px) {
-  .hero-inner { max-width: 1720px; }
+@media (min-width: 1360px) {
+  .hero-inner { max-width: none; }
+  .hero-content { padding-left: clamp(40px, 5vw, 96px); }
 }
 /* Mobile-first: centered stack, same as Nitro's phone layout. Desktop
    switches to the left-aligned editorial column. */
-.hero-content { max-width: 620px; margin-inline: auto; text-align: center; }
+.hero-content { margin-top: 40px; max-width: 620px; margin-inline: auto; text-align: center; }
 /* Eyebrow matches Nitro's hero h6: body font, ~20px, weight 700, 14px
    gap below (Nitro "OFFICIAL HOME OF CHAMPIONS"). */
 .hero-content .eyebrow {
@@ -523,10 +542,18 @@ body.nav-open { overflow: hidden; }
 .hero-actions .btn { min-height: 58px; padding: 0 34px; }
 @media (min-width: 992px) {
   .hero-content { margin-inline: 0; text-align: left; max-width: 640px; }
-  .hero-content h1 { max-width: 15ch; }
+  /* max-width in em scales with the h1's own font-size, so it always lands
+     between the width of "CRICKET LIVES HERE" (~7.05em) and "THE HEARTBEAT
+     OF CRICKET" (~9.63em) — forcing the headline to break into exactly two
+     lines (THE HEARTBEAT OF / CRICKET LIVES HERE) at every breakpoint. The
+     hero-content max-width below is widened per-step so it never clips the
+     h1's em width. */
+  .hero-content h1 { max-width: 8.2em; }
   .hero-content .lede { margin-inline: 0; }
   .hero-actions { justify-content: flex-start; margin-top: 48px; }
 }
+@media (min-width: 1200px) { .hero-content { max-width: 720px; } }
+@media (min-width: 1601px) { .hero-content { max-width: 900px; } }
 
 /* Headline word-stagger entrance — each word is its own inline-block span
    (see main.js splitHeroTitle) offset below/rotated, animated up+in with a
@@ -639,6 +666,32 @@ body.nav-open { overflow: hidden; }
   .hero-scroll svg { animation: none; }
 }
 
+/* ---- Mobile hero ----
+   1. Eyebrow shrinks + nowrap so "ONE GAME | MANY CULTURES | ONE COMMUNITY"
+      stays on a single line.
+   2. The text block is compacted (smaller top padding, tighter lede, smaller
+      gaps) so the player isn't pushed so far down.
+   3. The player photo drops into normal flow (position:relative) so the
+      hero-visual is exactly the photo's height — no absolute bottom-gap —
+      and enlarges to 98vw, so head + torso + arms show above the fold
+      instead of just the head. */
+@media (max-width: 640px) {
+  .hero { padding-top: 60px; }
+  .hero-content .eyebrow {
+    font-size: clamp(0.58rem, 3vw, 0.75rem);
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    margin-bottom: 8px;
+  }
+  .hero-content .lede { margin-top: 14px; font-size: 0.9rem; line-height: 1.45; }
+  .hero-actions { margin-top: 22px; }
+  .hero-visual { height: auto; margin-top: 8px; }
+  .hero-visual-photo {
+    position: relative; left: auto; right: auto; bottom: auto;
+    margin: 0 auto; width: min(98vw, 480px);
+  }
+}
+
 /* ==========================================================================
    Stat strip
    ========================================================================== */
@@ -716,7 +769,12 @@ body.nav-open { overflow: hidden; }
 /* Team card */
 .team-card { padding: 30px 26px; text-align: center; }
 .team-crest { width: 88px; height: 88px; margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; border-radius: 50%; flex-shrink: 0; }
-.team-crest img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
+.team-crest img { width: 100%; height: 100%; object-fit: contain; }
+/* Real crests are shields/badges, not discs — the circular mask belongs to the generated badge only.
+   The radius is a no-op on transparent crests; it tidies the few whose artwork carries its own
+   solid background (e.g. Aussie Kings). */
+.team-crest.is-logo { border-radius: 0; }
+.team-crest.is-logo img { border-radius: 10px; }
 .team-crest.is-generated { color: var(--msl-white); font-family: var(--font-display); font-weight: 900; font-size: 1.6rem; }
 .team-crest.crest-inline { margin: 0; }
 .team-card h3 { font-size: var(--fs-h4); margin-bottom: 8px; }
@@ -788,7 +846,22 @@ body.nav-open { overflow: hidden; }
    Tables — points table & leaderboards
    ========================================================================== */
 .table-wrap { overflow-x: auto; border-radius: var(--radius-lg); border: 1px solid var(--msl-line); background: var(--msl-white); -webkit-overflow-scrolling: touch; }
+
+/* Group A / Group B captions above each points table (2025 onwards). */
+.group-heading { font-family: var(--font-display); font-size: 1.05rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--msl-violet-500); margin: 28px 0 12px; display: flex; align-items: center; gap: 12px; }
+.group-heading:first-child { margin-top: 0; }
+.group-heading::after { content: ""; flex: 1; height: 1px; background: var(--msl-line); }
 table.data-table { width: 100%; border-collapse: collapse; min-width: 640px; font-family: var(--font-body); }
+
+/* Homepage previews: two side-by-side cards that must stay the same size.
+   They carry far fewer columns than the full standings tables, so the 640px
+   floor above would overflow their ~590px column and clip Pts / SR. */
+.home-preview { display: flex; flex-direction: column; }
+.home-preview .table-wrap { flex: 1; }
+.home-preview table.data-table { min-width: 460px; }
+/* Player rows are two lines (name + team) and so run taller than points rows;
+   matching the row height keeps both cards ending on the same line. */
+.home-preview table.data-table tbody tr { height: 78px; }
 table.data-table thead th {
   background: var(--msl-purple-950); color: rgba(255,255,255,0.85);
   font-size: var(--fs-xs); letter-spacing: 0.08em; text-transform: uppercase;
@@ -800,6 +873,8 @@ table.data-table tbody tr:nth-child(even) { background: var(--msl-cream); }
 table.data-table tbody tr:hover { background: var(--msl-lime-050); }
 table.data-table td.team-cell { display: flex; align-items: center; gap: 10px; font-weight: 700; white-space: nowrap; }
 table.data-table td.team-cell .mini-crest { width: 26px; height: 26px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
+table.data-table td.team-cell .mini-crest.is-logo { border-radius: 3px; }
+.mini-crest img { width: 100%; height: 100%; object-fit: contain; }
 table.data-table td.rank { font-family: var(--font-display); font-weight: 800; color: var(--msl-violet-500); font-size: 1.05rem; }
 table.data-table td.pts { font-weight: 800; color: var(--msl-violet-500); }
 table.data-table .nrr-pos { color: var(--msl-green); font-weight: 700; }

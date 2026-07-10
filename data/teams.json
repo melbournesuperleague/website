@@ -1,5 +1,7 @@
 {
-  "_comment": "One entry per franchise. 'logo' points to assets/img/teams/<slug>.png — drop a file there with that exact name and it replaces the auto-generated crest automatically, no code changes needed. See docs/CONTENT-GUIDE.md.",
+  "_comment": "One entry per franchise. 'logo' points to assets/img/teams/<slug>.png — drop a file there with that exact name, run `npm run build`, and it replaces the auto-generated initials crest automatically. See docs/CONTENT-GUIDE.md.",
+  "_note": "This roster spans every season, so it is NOT the list of teams in any one year. melbourne-thunders played 2024 but not 2025; the seven teams below melbourne-cobras played 2025 but not 2024. A team with no row in the selected year's points table simply shows no rank.",
+  "_todo": "melbourne-thunders has no logo file yet — it renders a generated initials badge until assets/img/teams/melbourne-thunders.png exists.",
   "teams": [
     {
       "slug": "melbourne-bulls",
@@ -49,6 +51,63 @@
       "accent": "#2B1080",
       "logo": "assets/img/teams/melbourne-cobras.png",
       "blurb": "A young, ambitious squad looking to climb the MSL Premiers table."
+    },
+    {
+      "slug": "westside-falcons",
+      "name": "Westside Falcons",
+      "sourceName": "Westside Falcons",
+      "accent": "#F26B21",
+      "logo": "assets/img/teams/westside-falcons.png",
+      "blurb": "Squad profile coming soon."
+    },
+    {
+      "slug": "ray-white-warriors",
+      "name": "Ray White Warriors",
+      "sourceName": "Ray White Warriors",
+      "accent": "#1E2A66",
+      "logo": "assets/img/teams/ray-white-warriors.png",
+      "blurb": "Squad profile coming soon."
+    },
+    {
+      "slug": "aussie-kings",
+      "name": "Aussie Kings",
+      "sourceName": "Aussie Kings",
+      "accent": "#C8912C",
+      "logo": "assets/img/teams/aussie-kings.png",
+      "blurb": "Squad profile coming soon."
+    },
+    {
+      "slug": "kerala-tigers",
+      "name": "Kerala Tigers",
+      "sourceName": "Kerala Tigers",
+      "accent": "#F08A24",
+      "logo": "assets/img/teams/kerala-tigers.png",
+      "blurb": "Squad profile coming soon."
+    },
+    {
+      "slug": "sydney-title-club",
+      "name": "Sydney Title Club",
+      "sourceName": "Sydney Title Club",
+      "accent": "#D42027",
+      "logo": "assets/img/teams/sydney-title-club.png",
+      "blurb": "Squad profile coming soon."
+    },
+    {
+      "slug": "brimbank-lions",
+      "name": "Brimbank Lions",
+      "sourceName": "Brimbank Lions",
+      "accent": "#F0C24F",
+      "accentText": "#14102B",
+      "logo": "assets/img/teams/brimbank-lions.png",
+      "blurb": "Squad profile coming soon."
+    },
+    {
+      "slug": "sahara-chargers",
+      "name": "Sahara Chargers",
+      "sourceName": "Sahara Chargers",
+      "accent": "#2B3A8F",
+      "logo": "assets/img/teams/sahara-chargers.png",
+      "blurb": "Squad profile coming soon."
     }
   ]
 }

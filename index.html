@@ -91,7 +91,7 @@
         <h1 class="hero-title" data-split-title data-accent-words="Cricket">The Heartbeat Of Cricket Lives Here</h1>
         <p class="lede reveal" data-reveal-delay="0.3">Melbourne Super League is one of Australia's leading multicultural cricket organisations, creating opportunities for players, inspiring communities, and redefining the future of cricket through world-class competitions, innovation and inclusion.</p>
         <div class="hero-actions reveal" data-reveal-delay="0.5">
-          <a href="get-involved.html" class="btn btn-lime" data-btn-icon>Join the Movement</a>
+          <a href="get-involved.html" class="btn btn-lime" data-btn-icon>Join MSL Premiers</a>
           <a href="standings.html" class="btn btn-outline" data-btn-icon>View Standings</a>
         </div>
       </div>
@@ -142,16 +142,17 @@
           <h2>Live Standings &amp; Leaderboards</h2>
         </div>
         <div class="select-wrap">
-          <select class="season-select" data-home-season-select aria-label="Select season"></select>
+          <select class="season-select" data-home-season-select aria-label="Select year"></select>
           <span data-home-select-icon></span>
         </div>
       </div>
       <div class="grid grid-2">
-        <div class="reveal">
+        <div class="reveal home-preview">
           <div class="flex justify-between items-center" style="margin-bottom:16px">
             <h3 style="font-size:1.2rem">Points Table</h3>
             <a href="standings.html" class="link-arrow">Full Standings</a>
           </div>
+          <div class="leaderboard-tabs" role="tablist" data-home-group-tabs style="margin-bottom:16px"></div>
           <div class="table-wrap">
             <table class="data-table">
               <thead><tr><th>#</th><th>Team</th><th class="num">P</th><th class="num">W</th><th class="num">L</th><th class="num">Pts</th></tr></thead>
@@ -159,14 +160,19 @@
             </table>
           </div>
         </div>
-        <div class="reveal">
+        <div class="reveal home-preview">
           <div class="flex justify-between items-center" style="margin-bottom:16px">
-            <h3 style="font-size:1.2rem">Most Runs</h3>
+            <h3 style="font-size:1.2rem">Player Leaderboards</h3>
             <a href="standings.html" class="link-arrow">Full Leaderboards</a>
+          </div>
+          <div class="leaderboard-tabs" role="tablist" style="margin-bottom:16px">
+            <button data-home-lb-tab="batting" aria-selected="true" role="tab">Most Runs</button>
+            <button data-home-lb-tab="bowling" aria-selected="false" role="tab">Most Wickets</button>
+            <button data-home-lb-tab="mvp" aria-selected="false" role="tab">MVP Rankings</button>
           </div>
           <div class="table-wrap">
             <table class="data-table">
-              <thead><tr><th>#</th><th>Player</th><th class="num">Runs</th><th class="num">SR</th></tr></thead>
+              <thead data-lb-preview-head></thead>
               <tbody data-lb-preview></tbody>
             </table>
           </div>
@@ -247,7 +253,7 @@
           <li><a href="competition.html">MSL Premiers</a></li>
           <li><a href="teams.html">Teams</a></li>
           <li><a href="standings.html">Standings &amp; Leaderboards</a></li>
-          <li><a href="https://cricheroes.com/tournament/1217667/msl-premiers/matches/past-matches" target="_blank" rel="noopener">Fixtures &amp; Results</a></li>
+          <li><a href="https://cricheroes.com/tournament/1729194/msl-premiers-2025/matches/past-matches" target="_blank" rel="noopener">Fixtures &amp; Results</a></li>
         </ul>
       </div>
       <div class="footer-col">

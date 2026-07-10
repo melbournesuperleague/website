@@ -1,13 +1,19 @@
 {
-  "_comment": "Controls the year/season selector on standings.html and the leaderboard widgets. Add a new object here every season — see docs/CONTENT-GUIDE.md 'Adding a new season' for the full walkthrough.",
+  "_comment": "Controls the year selector on standings.html and the home page. Add a new object here every season — see docs/CONTENT-GUIDE.md 'Adding a new season'. 'isDefault' picks which year loads first; keep it on the most recent season. Seasons are listed newest first.",
   "seasons": [
     {
-      "id": "2025-26",
-      "label": "MSL Premiers 2025–26",
+      "id": "2025",
+      "label": "2025",
       "isDefault": true,
-      "pointsTable": "data/points-table/2025-26.json",
-      "leaderboards": "data/leaderboards/2025-26.json",
-      "stats": "data/stats/2025-26.json"
+      "pointsTable": "data/points-table/2025.json",
+      "leaderboards": "data/leaderboards/2025.json"
+    },
+    {
+      "id": "2024",
+      "label": "2024",
+      "isDefault": false,
+      "pointsTable": "data/points-table/2024.json",
+      "leaderboards": "data/leaderboards/2024.json"
     }
   ]
 }

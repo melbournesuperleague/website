@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Standings &amp; Leaderboards — Melbourne Super League</title>
-<meta name="description" content="MSL Premiers points table, batting, bowling and MVP leaderboards, and tournament stats — select a season to view.">
+<meta name="description" content="MSL Premiers points table plus batting, bowling and MVP leaderboards — select a year to view.">
 <link rel="icon" href="assets/img/brand/favicon-256.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -89,9 +89,8 @@
       <div class="breadcrumb"><a href="index.html">Home</a> <span data-crumb-icon></span> <span>Standings</span></div>
       <div class="eyebrow">Season Data — Powered By CricHeroes</div>
       <h1>Standings &amp; Leaderboards</h1>
-      <p class="lede" style="margin-top:16px;max-width:60ch;color:rgba(255,255,255,0.72)">Live points table, top-5 batting, bowling and MVP leaderboards for <span data-season-label>MSL Premiers</span>. Use the selector below to switch seasons once future years are added.</p>
+      <p class="lede" style="margin-top:16px;max-width:60ch;color:rgba(255,255,255,0.72)">Points table, top-5 batting, bowling and MVP leaderboards for MSL Premiers <span data-season-label>2025</span>. Use the selector below to switch years.</p>
     </div>
-    <div class="stat-strip" data-stat-strip></div>
   </div>
 
   <section class="section-pad-sm bg-cream">
@@ -102,22 +101,11 @@
           <p style="font-size:.85rem;margin-top:4px">League phase standings for <span data-season-label>this season</span>.</p>
         </div>
         <div class="select-wrap">
-          <select class="season-select" data-season-select aria-label="Select season"></select>
+          <select class="season-select" data-season-select aria-label="Select year"></select>
           <span data-select-icon></span>
         </div>
       </div>
-      <div class="table-wrap">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>#</th><th>Team</th><th class="num">P</th><th class="num">W</th><th class="num">L</th>
-              <th class="num">D</th><th class="num">NR</th><th class="num">NRR</th><th class="num">Quotient</th>
-              <th class="num">For</th><th class="num">Pts</th><th>Form</th>
-            </tr>
-          </thead>
-          <tbody data-points-body></tbody>
-        </table>
-      </div>
+      <div data-points-groups></div>
       <div class="leaderboard-foot">
         <a class="link-arrow" data-points-source href="#" target="_blank" rel="noopener">View Full Points Table on CricHeroes <span data-ext-icon></span></a>
       </div>
@@ -167,7 +155,7 @@
           <li><a href="competition.html">MSL Premiers</a></li>
           <li><a href="teams.html">Teams</a></li>
           <li><a href="standings.html">Standings &amp; Leaderboards</a></li>
-          <li><a href="https://cricheroes.com/tournament/1217667/msl-premiers/matches/past-matches" target="_blank" rel="noopener">Fixtures &amp; Results</a></li>
+          <li><a href="https://cricheroes.com/tournament/1729194/msl-premiers-2025/matches/past-matches" target="_blank" rel="noopener">Fixtures &amp; Results</a></li>
         </ul>
       </div>
       <div class="footer-col">

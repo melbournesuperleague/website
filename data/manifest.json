@@ -11,6 +11,19 @@
   "assets/img/gallery/community-day": [
     "assets/img/gallery/community-day/01.jpg"
   ],
-  "__teamLogos": {},
-  "__generatedAt": "2026-07-03T09:15:59.436Z"
+  "__teamLogos": {
+    "auscon-melbourne-united": "assets/img/teams/auscon-melbourne-united.png",
+    "aussie-kings": "assets/img/teams/aussie-kings.png",
+    "brimbank-lions": "assets/img/teams/brimbank-lions.png",
+    "kerala-tigers": "assets/img/teams/kerala-tigers.png",
+    "melbourne-bulls": "assets/img/teams/melbourne-bulls.png",
+    "melbourne-cobras": "assets/img/teams/melbourne-cobras.png",
+    "melbourne-pirates": "assets/img/teams/melbourne-pirates.png",
+    "melbourne-tuskers": "assets/img/teams/melbourne-tuskers.png",
+    "ray-white-warriors": "assets/img/teams/ray-white-warriors.png",
+    "sahara-chargers": "assets/img/teams/sahara-chargers.png",
+    "sydney-title-club": "assets/img/teams/sydney-title-club.png",
+    "westside-falcons": "assets/img/teams/westside-falcons.png"
+  },
+  "__generatedAt": "2026-07-10T10:07:55.498Z"
 }

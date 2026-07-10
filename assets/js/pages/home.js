@@ -1,13 +1,31 @@
 import {
   getTeams, getManifest, getNews, getGallery, getSeasonsIndex, loadPointsTable, loadLeaderboards,
-  getDefaultSeasonId, teamCrestHTML, miniCrestHTML, formatDate,
+  getDefaultSeasonId, teamCrestHTML, miniCrestHTML, formatDate, standingsGroups,
 } from "../data.js";
 
 const { icon } = window.MSLIcons;
 
 let teams = [];
 let manifest = {};
+let activeLbTab = "batting";
+let activeGroup = 0;
 const seasonLabelCache = {};
+
+/* Compact previews of the full leaderboards on standings.html — three columns each. */
+const previewColumns = {
+  batting: {
+    head: ["#", "Player", "Runs", "SR"],
+    row: (p) => [`<strong>${p.runs}</strong>`, p.strikeRate],
+  },
+  bowling: {
+    head: ["#", "Player", "Wkts", "Econ"],
+    row: (p) => [`<strong>${p.wickets}</strong>`, p.economy],
+  },
+  mvp: {
+    head: ["#", "Player", "Points", "Mat"],
+    row: (p) => [`<strong>${p.total.toFixed(2)}</strong>`, p.mat],
+  },
+};
 
 async function init() {
   [teams, manifest] = await Promise.all([getTeams(), getManifest()]);
@@ -24,6 +42,16 @@ async function init() {
       .join("");
     seasonSelect.addEventListener("change", (e) => renderSeason(e.target.value));
   }
+
+  // Leaderboard category tabs — mirrors the tab set on standings.html.
+  const lbTabs = document.querySelectorAll("[data-home-lb-tab]");
+  lbTabs.forEach((btn) =>
+    btn.addEventListener("click", () => {
+      activeLbTab = btn.dataset.homeLbTab;
+      lbTabs.forEach((b) => b.setAttribute("aria-selected", String(b === btn)));
+      renderLeaderboardPreview(window.__mslHomeLeaderboards);
+    })
+  );
 
   await renderSeason(defaultSeasonId);
 
@@ -74,40 +102,83 @@ async function renderSeason(seasonId) {
   const [table, leaderboards] = await Promise.all([
     loadPointsTable(seasonId), loadLeaderboards(seasonId),
   ]);
+  window.__mslHomeLeaderboards = leaderboards;
 
-  // Points table preview — every team, not just the top 3, so the table
-  // never looks like it's missing teams.
-  const pointsPreview = document.querySelector("[data-points-preview]");
-  if (pointsPreview) {
-    pointsPreview.innerHTML = table.standings
-      .map((row) => {
-        const team = teams.find((t) => t.slug === row.team) || { name: row.team, slug: row.team };
-        return `<tr>
-          <td class="rank">${row.rank}</td>
-          <td class="team-cell"><a href="team-details.html?team=${team.slug}" style="display:flex;align-items:center;gap:10px;color:inherit">${miniCrestHTML(team, manifest)}${team.name}</a></td>
-          <td class="num">${row.played}</td><td class="num">${row.won}</td><td class="num">${row.lost}</td>
-          <td class="num pts">${row.points}</td>
-        </tr>`;
-      })
-      .join("");
+  // Points table preview — one group at a time, picked with the tabs above it,
+  // so a 12-team two-group season doesn't run the page long.
+  window.__mslHomeGroups = standingsGroups(table);
+  activeGroup = 0;
+  renderGroupTabs();
+  renderPointsPreview();
+
+  renderLeaderboardPreview(leaderboards);
+}
+
+/* Group A / Group B pickers. A single-group season (2024) still renders its one
+   pill — dropping the row would shorten this card and break symmetry with the
+   leaderboard card beside it. */
+function renderGroupTabs() {
+  const wrap = document.querySelector("[data-home-group-tabs]");
+  if (!wrap) return;
+  const groups = window.__mslHomeGroups || [];
+
+  if (!groups.length) {
+    wrap.innerHTML = "";
+    wrap.hidden = true;
+    return;
   }
+  wrap.hidden = false;
+  wrap.innerHTML = groups
+    .map((g, i) => `<button type="button" role="tab" data-home-group-tab="${i}" aria-selected="${i === activeGroup}">${g.name}</button>`)
+    .join("");
 
-  // Batting leaderboard preview (top 3 — intentionally a teaser for the full leaderboard)
+  wrap.querySelectorAll("[data-home-group-tab]").forEach((btn) =>
+    btn.addEventListener("click", () => {
+      activeGroup = Number(btn.dataset.homeGroupTab);
+      wrap.querySelectorAll("[data-home-group-tab]").forEach((b) => b.setAttribute("aria-selected", String(b === btn)));
+      renderPointsPreview();
+    })
+  );
+}
+
+function renderPointsPreview() {
+  const body = document.querySelector("[data-points-preview]");
+  const group = (window.__mslHomeGroups || [])[activeGroup];
+  if (!body || !group) return;
+
+  body.innerHTML = group.standings
+    .map((row) => {
+      const team = teams.find((t) => t.slug === row.team) || { name: row.team, slug: row.team };
+      return `<tr>
+        <td class="rank">${row.rank}</td>
+        <td class="team-cell"><a href="team-details.html?team=${team.slug}" style="display:flex;align-items:center;gap:10px;color:inherit">${miniCrestHTML(team, manifest)}${team.name}</a></td>
+        <td class="num">${row.played}</td><td class="num">${row.won}</td><td class="num">${row.lost}</td>
+        <td class="num pts">${row.points}</td>
+      </tr>`;
+    })
+    .join("");
+}
+
+// Top 5 — the full leaderboard on standings.html goes deeper.
+function renderLeaderboardPreview(leaderboards) {
   const lbPreview = document.querySelector("[data-lb-preview]");
-  if (lbPreview) {
-    lbPreview.innerHTML = leaderboards.batting.players
-      .slice(0, 3)
-      .map((p) => {
-        const team = teams.find((t) => t.slug === p.team);
-        return `<tr>
-          <td class="rank">${p.rank}</td>
-          <td class="player-name"><a href="${leaderboards.cricheroesUrl}" target="_blank" rel="noopener">${p.name} ${icon("externalLink")}</a><span class="player-team">${team ? team.name : ""}</span></td>
-          <td class="num"><strong>${p.runs}</strong></td>
-          <td class="num">${p.strikeRate}</td>
-        </tr>`;
-      })
-      .join("");
-  }
+  const lbHead = document.querySelector("[data-lb-preview-head]");
+  if (!lbPreview || !leaderboards) return;
+
+  const set = previewColumns[activeLbTab];
+  lbHead.innerHTML = `<tr>${set.head.map((h, i) => `<th class="${i > 1 ? "num" : ""}">${h}</th>`).join("")}</tr>`;
+  lbPreview.innerHTML = leaderboards[activeLbTab].players
+    .slice(0, 5)
+    .map((p) => {
+      const team = teams.find((t) => t.slug === p.team);
+      const cells = set.row(p).map((v) => `<td class="num">${v}</td>`).join("");
+      return `<tr>
+        <td class="rank">${p.rank}</td>
+        <td class="player-name"><a href="${leaderboards.cricheroesUrl}" target="_blank" rel="noopener">${p.name} ${icon("externalLink")}</a><span class="player-team">${team ? team.name : ""}</span></td>
+        ${cells}
+      </tr>`;
+    })
+    .join("");
 }
 
 init();

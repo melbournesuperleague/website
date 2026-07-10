@@ -1,4 +1,4 @@
-import { getTeams, getManifest, loadPointsTable, loadLeaderboards, getDefaultSeasonId, teamCrestHTML, qs } from "../data.js";
+import { getTeams, getManifest, loadPointsTable, loadLeaderboards, getDefaultSeasonId, getSeasonById, standingsGroups, teamCrestHTML, qs } from "../data.js";
 
 const { icon } = window.MSLIcons;
 const wrap = document.querySelector("[data-team-details]");
@@ -16,8 +16,13 @@ async function init() {
   }
 
   document.title = `${team.name} — Melbourne Super League`;
-  const [table, leaderboards] = await Promise.all([loadPointsTable(seasonId), loadLeaderboards(seasonId)]);
-  const standing = table.standings.find((s) => s.team === slug);
+  const [table, leaderboards, season] = await Promise.all([
+    loadPointsTable(seasonId), loadLeaderboards(seasonId), getSeasonById(seasonId),
+  ]);
+  // The roster spans seasons, so a team may have no row in the current season's table.
+  const group = standingsGroups(table).find((g) => g.standings.some((s) => s.team === slug));
+  const standing = group?.standings.find((s) => s.team === slug);
+  const groupLabel = group && standingsGroups(table).length > 1 ? ` in ${group.name}` : "";
 
   const highlights = [];
   ["batting", "bowling", "mvp"].forEach((cat) => {
@@ -34,7 +39,7 @@ async function init() {
           ${teamCrestHTML(team, manifest, "crest-inline")}
           <div>
             <h1 style="margin-bottom:6px">${team.name}</h1>
-            ${standing ? `<p style="color:var(--msl-lime-400);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:.85rem">Season Rank #${standing.rank} · ${standing.points} Points</p>` : ""}
+            ${standing ? `<p style="color:var(--msl-lime-400);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:.85rem">${season.label} · Rank #${standing.rank}${groupLabel} · ${standing.points} Points</p>` : ""}
           </div>
         </div>
       </div>
@@ -44,7 +49,7 @@ async function init() {
       <div class="container">
         <div class="split">
           <div>
-            <div class="eyebrow">MSL Premiers 2025–26</div>
+            <div class="eyebrow">MSL Premiers ${season.label}</div>
             <h2>About the ${team.name}</h2>
             <p class="lede" style="margin-top:18px">${team.blurb}</p>
             ${standing ? `
@@ -69,7 +74,7 @@ async function init() {
               </div>
             ` : `<div class="empty-state" style="padding:40px 0">${icon("trophy")}<p>Season highlights will appear here once this team's players break into the top 5 leaderboards.</p></div>`}
             <p style="margin-top:24px;font-size:.85rem">Full squad list and match-by-match scorecards are available on CricHeroes.</p>
-            <a class="btn btn-outline-dark btn-sm" style="margin-top:12px" href="https://cricheroes.com/tournament/1217667/msl-premiers/teams" target="_blank" rel="noopener">View on CricHeroes ${icon("externalLink")}</a>
+            <a class="btn btn-outline-dark btn-sm" style="margin-top:12px" href="https://cricheroes.com/tournament/1729194/msl-premiers-2025/teams" target="_blank" rel="noopener">View on CricHeroes ${icon("externalLink")}</a>
           </div>
         </div>
       </div>

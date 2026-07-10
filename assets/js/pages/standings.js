@@ -1,12 +1,11 @@
 import {
-  getSeasonsIndex, getTeams, getManifest, loadPointsTable, loadLeaderboards, loadStats,
-  teamBySlug, teamCrestHTML, miniCrestHTML, getDefaultSeasonId,
+  getSeasonsIndex, getTeams, getManifest, loadPointsTable, loadLeaderboards,
+  teamCrestHTML, miniCrestHTML, getDefaultSeasonId, standingsGroups,
 } from "../data.js";
 
 const { icon } = window.MSLIcons;
 
-const pointsBody = document.querySelector("[data-points-body]");
-const statStrip = document.querySelector("[data-stat-strip]");
+const pointsGroups = document.querySelector("[data-points-groups]");
 const seasonSelect = document.querySelector("[data-season-select]");
 const seasonLabel = document.querySelectorAll("[data-season-label]");
 const lbBody = document.querySelector("[data-leaderboard-body]");
@@ -42,15 +41,13 @@ async function init() {
 
 async function renderSeason(seasonId) {
   seasonLabel.forEach((el) => (el.textContent = seasons_label_cache[seasonId] || seasonId));
-  const [table, leaderboards, stats] = await Promise.all([
+  const [table, leaderboards] = await Promise.all([
     loadPointsTable(seasonId),
     loadLeaderboards(seasonId),
-    loadStats(seasonId),
   ]);
   window.__mslCurrentLeaderboards = leaderboards;
-  renderStats(stats);
-  await renderPointsTable(table);
-  await renderLeaderboard(leaderboards, activeTab);
+  renderPointsTable(table);
+  renderLeaderboard(leaderboards, activeTab);
   if (pointsSourceLink) pointsSourceLink.href = table.sourceUrl || "#";
   if (lbSourceLink) lbSourceLink.href = leaderboards.cricheroesUrl || "#";
 }
@@ -59,40 +56,52 @@ async function renderSeason(seasonId) {
 const seasons_label_cache = {};
 getSeasonsIndex().then((list) => list.forEach((s) => (seasons_label_cache[s.id] = s.label)));
 
-function renderStats(statsDoc) {
-  if (!statStrip) return;
-  statStrip.innerHTML = statsDoc.stats
-    .map((s) => `<div class="stat-item"><span class="stat-value">${s.value}</span><span class="stat-label">${s.label}</span></div>`)
+function standingRow(row) {
+  const team = teams.find((t) => t.slug === row.team) || { name: row.team, slug: row.team };
+  const nrrClass = row.nrr > 0 ? "nrr-pos" : row.nrr < 0 ? "nrr-neg" : "";
+  const nrrSign = row.nrr > 0 ? "+" : "";
+  const form = row.form
+    .map((r) => `<span class="form-pill ${r}" title="${r === "W" ? "Won" : r === "L" ? "Lost" : r}">${r}</span>`)
     .join("");
+  return `<tr>
+    <td class="rank">${row.rank}</td>
+    <td class="team-cell"><a href="team-details.html?team=${team.slug}" style="display:flex;align-items:center;gap:10px;color:inherit">${miniCrestHTML(team, manifest)}${team.name}</a></td>
+    <td class="num">${row.played}</td>
+    <td class="num">${row.won}</td>
+    <td class="num">${row.lost}</td>
+    <td class="num">${row.drawn}</td>
+    <td class="num">${row.noResult}</td>
+    <td class="num ${nrrClass}">${nrrSign}${row.nrr.toFixed(3)}</td>
+    <td class="num">${row.runsFor}</td>
+    <td class="num">${row.runsAgainst}</td>
+    <td class="num pts">${row.points}</td>
+    <td><div class="form-pills">${form}</div></td>
+  </tr>`;
 }
 
-async function renderPointsTable(table) {
-  if (!pointsBody) return;
-  const rows = await Promise.all(
-    table.standings.map(async (row) => {
-      const team = teams.find((t) => t.slug === row.team) || { name: row.team, slug: row.team };
-      const nrrClass = row.nrr > 0 ? "nrr-pos" : row.nrr < 0 ? "nrr-neg" : "";
-      const nrrSign = row.nrr > 0 ? "+" : "";
-      const form = row.form
-        .map((r) => `<span class="form-pill ${r}" title="${r === "W" ? "Won" : r === "L" ? "Lost" : r}">${r}</span>`)
-        .join("");
-      return `<tr>
-        <td class="rank">${row.rank}</td>
-        <td class="team-cell"><a href="team-details.html?team=${team.slug}" style="display:flex;align-items:center;gap:10px;color:inherit">${miniCrestHTML(team, manifest)}${team.name}</a></td>
-        <td class="num">${row.played}</td>
-        <td class="num">${row.won}</td>
-        <td class="num">${row.lost}</td>
-        <td class="num">${row.drawn}</td>
-        <td class="num">${row.noResult}</td>
-        <td class="num ${nrrClass}">${nrrSign}${row.nrr.toFixed(3)}</td>
-        <td class="num">${row.quotient}</td>
-        <td class="num">${row.for}</td>
-        <td class="num pts">${row.points}</td>
-        <td><div class="form-pills">${form}</div></td>
-      </tr>`;
-    })
-  );
-  pointsBody.innerHTML = rows.join("");
+function renderPointsTable(table) {
+  if (!pointsGroups) return;
+  const groups = standingsGroups(table);
+  // A single unnamed league phase needs no group heading; two groups do.
+  const showHeadings = groups.length > 1;
+  pointsGroups.innerHTML = groups
+    .map(
+      (g) => `
+      ${showHeadings ? `<h3 class="group-heading">${g.name}</h3>` : ""}
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th><th>Team</th><th class="num">P</th><th class="num">W</th><th class="num">L</th>
+              <th class="num">D</th><th class="num">NR</th><th class="num">NRR</th><th class="num">For</th>
+              <th class="num">Against</th><th class="num">Pts</th><th>Form</th>
+            </tr>
+          </thead>
+          <tbody>${g.standings.map(standingRow).join("")}</tbody>
+        </table>
+      </div>`
+    )
+    .join("");
 }
 
 const columnSets = {
@@ -125,7 +134,7 @@ function playerCell(p) {
   return `<div class="player-name"><a href="${window.__mslCurrentLeaderboards.cricheroesUrl}" target="_blank" rel="noopener">${p.name} ${icon("externalLink", "")}</a><span class="player-team">${teamName}</span></div>`;
 }
 
-async function renderLeaderboard(doc, tab) {
+function renderLeaderboard(doc, tab) {
   if (!lbBody || !doc) return;
   const set = columnSets[tab];
   const data = doc[tab];

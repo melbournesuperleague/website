@@ -5,14 +5,14 @@
   "flagshipCompetition": "MSL Premiers",
   "tagline": "Where Communities Unite. Talent Thrives. Legacies Begin.",
   "foundedYear": 2021,
-  "defaultSeason": "2025-26",
+  "defaultSeason": "2025",
   "cricheroes": {
-    "tournamentName": "MSL Premiers",
-    "tournamentId": "1217667",
-    "baseUrl": "https://cricheroes.com/tournament/1217667/msl-premiers",
-    "leaderboardUrl": "https://cricheroes.com/tournament/1217667/msl-premiers/leaderboard",
-    "pointsTableUrl": "https://cricheroes.com/tournament/1217667/msl-premiers/points-table",
-    "matchesUrl": "https://cricheroes.com/tournament/1217667/msl-premiers/matches/past-matches"
+    "tournamentName": "MSL Premiers 2025",
+    "tournamentId": "1729194",
+    "baseUrl": "https://cricheroes.com/tournament/1729194/msl-premiers-2025",
+    "leaderboardUrl": "https://cricheroes.com/tournament/1729194/msl-premiers-2025/leaderboard",
+    "pointsTableUrl": "https://cricheroes.com/tournament/1729194/msl-premiers-2025/points-table",
+    "matchesUrl": "https://cricheroes.com/tournament/1729194/msl-premiers-2025/matches/past-matches"
   },
   "contact": {
     "email": "melbournesuperleague@gmail.com",
@@ -39,7 +39,7 @@
       { "label": "MSL Premiers", "href": "competition.html" },
       { "label": "Teams", "href": "teams.html" },
       { "label": "Standings & Leaderboards", "href": "standings.html" },
-      { "label": "Fixtures & Results", "href": "https://cricheroes.com/tournament/1217667/msl-premiers/matches/past-matches" }
+      { "label": "Fixtures & Results", "href": "https://cricheroes.com/tournament/1729194/msl-premiers-2025/matches/past-matches" }
     ],
     "league": [
       { "label": "About MSL", "href": "about.html" },

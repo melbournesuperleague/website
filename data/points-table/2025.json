@@ -1,0 +1,31 @@
+{
+  "_comment": "Source: 'points table MSL PREMIERS 2025.pdf' (CricHeroes tournament 1729194). Two groups of six. 'runsFor'/'runsAgainst' are runs/overs scored and conceded — CricHeroes prints these under its 'For'/'Against' columns and leaves its 'Quotient' column blank. Every NRR below reconciles against runsFor minus runsAgainst.",
+  "season": "2025",
+  "competition": "MSL Premiers 2025 — League Matches",
+  "lastUpdated": "2026-07-10",
+  "sourceUrl": "https://cricheroes.com/tournament/1729194/msl-premiers-2025/points-table",
+  "groups": [
+    {
+      "name": "Group A",
+      "standings": [
+        { "rank": 1, "team": "melbourne-pirates", "played": 5, "won": 3, "lost": 2, "drawn": 0, "tied": 0, "noResult": 0, "nrr": 1.547, "runsFor": "802/91.1", "runsAgainst": "719/99.1", "points": 6, "form": ["L", "L", "W", "W", "W"] },
+        { "rank": 2, "team": "westside-falcons", "played": 5, "won": 3, "lost": 2, "drawn": 0, "tied": 0, "noResult": 0, "nrr": 1.437, "runsFor": "875/98", "runsAgainst": "708/94.3", "points": 6, "form": ["W", "L", "W", "W", "L"] },
+        { "rank": 3, "team": "ray-white-warriors", "played": 5, "won": 3, "lost": 2, "drawn": 0, "tied": 0, "noResult": 0, "nrr": 0.124, "runsFor": "826/93.1", "runsAgainst": "864/98.5", "points": 6, "form": ["W", "W", "L", "W", "L"] },
+        { "rank": 4, "team": "kerala-tigers", "played": 5, "won": 3, "lost": 2, "drawn": 0, "tied": 0, "noResult": 0, "nrr": 0.027, "runsFor": "844/99", "runsAgainst": "847/99.4", "points": 6, "form": ["L", "W", "L", "W", "W"] },
+        { "rank": 5, "team": "melbourne-bulls", "played": 5, "won": 2, "lost": 3, "drawn": 0, "tied": 0, "noResult": 0, "nrr": -0.316, "runsFor": "858/96.4", "runsAgainst": "861/93.4", "points": 4, "form": ["L", "W", "W", "L", "L"] },
+        { "rank": 6, "team": "melbourne-cobras", "played": 5, "won": 1, "lost": 4, "drawn": 0, "tied": 0, "noResult": 0, "nrr": -2.913, "runsFor": "760/99.1", "runsAgainst": "966/91.2", "points": 2, "form": ["W", "L", "L", "L", "L"] }
+      ]
+    },
+    {
+      "name": "Group B",
+      "standings": [
+        { "rank": 1, "team": "auscon-melbourne-united", "played": 5, "won": 4, "lost": 1, "drawn": 0, "tied": 0, "noResult": 0, "nrr": 2.552, "runsFor": "842/88.4", "runsAgainst": "691/99.3", "points": 8, "form": ["W", "W", "W", "W", "L"] },
+        { "rank": 2, "team": "sahara-chargers", "played": 5, "won": 4, "lost": 1, "drawn": 0, "tied": 0, "noResult": 0, "nrr": 0.125, "runsFor": "634/79.3", "runsAgainst": "594/75.4", "points": 8, "form": ["W", "L", "W", "W", "W"] },
+        { "rank": 3, "team": "melbourne-tuskers", "played": 5, "won": 3, "lost": 2, "drawn": 0, "tied": 0, "noResult": 0, "nrr": 2.152, "runsFor": "961/94.1", "runsAgainst": "800/99.2", "points": 6, "form": ["L", "W", "L", "W", "W"] },
+        { "rank": 4, "team": "aussie-kings", "played": 5, "won": 3, "lost": 2, "drawn": 0, "tied": 0, "noResult": 0, "nrr": -0.029, "runsFor": "809/95.4", "runsAgainst": "799/94.1", "points": 6, "form": ["W", "W", "W", "L", "L"] },
+        { "rank": 5, "team": "sydney-title-club", "played": 5, "won": 1, "lost": 4, "drawn": 0, "tied": 0, "noResult": 0, "nrr": -3.175, "runsFor": "503/80", "runsAgainst": "757/80", "points": 2, "form": ["L", "L", "L", "L", "W"] },
+        { "rank": 6, "team": "brimbank-lions", "played": 5, "won": 0, "lost": 5, "drawn": 0, "tied": 0, "noResult": 0, "nrr": -6.985, "runsFor": "467/100", "runsAgainst": "575/49.2", "points": 0, "form": ["L", "L", "L", "L", "L"] }
+      ]
+    }
+  ]
+}
