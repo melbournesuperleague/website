@@ -1,0 +1,16 @@
+# Cloudflare Pages custom headers — cache images/fonts aggressively,
+# keep HTML/JSON fresh so content edits show up immediately.
+/assets/img/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/css/*
+  Cache-Control: public, max-age=86400
+
+/assets/js/*
+  Cache-Control: public, max-age=86400
+
+/data/*
+  Cache-Control: public, max-age=300
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate

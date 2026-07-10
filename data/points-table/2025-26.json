@@ -1,0 +1,15 @@
+{
+  "_comment": "Source: MSL Premiers points table (CricHeroes), league-phase snapshot. Fields mirror CricHeroes' own columns exactly. To update after new results, edit the numbers below or re-export from CricHeroes and replace this file — see docs/CONTENT-GUIDE.md.",
+  "season": "2025-26",
+  "competition": "MSL Premiers — League Matches",
+  "lastUpdated": "2026-07-03",
+  "sourceUrl": "https://cricheroes.com/tournament/1217667/msl-premiers/points-table",
+  "standings": [
+    { "rank": 1, "team": "melbourne-thunders", "played": 5, "won": 4, "lost": 1, "drawn": 0, "tied": 0, "noResult": 0, "nrr": 0.094, "quotient": "858/99.5", "for": "850/100", "points": 8, "form": ["W", "W", "L", "W", "W"] },
+    { "rank": 2, "team": "melbourne-pirates", "played": 5, "won": 3, "lost": 2, "drawn": 0, "tied": 0, "noResult": 0, "nrr": 0.508, "quotient": "851/95.1", "for": "842/99.5", "points": 6, "form": ["L", "W", "W", "W", "L"] },
+    { "rank": 3, "team": "melbourne-bulls", "played": 5, "won": 3, "lost": 2, "drawn": 0, "tied": 0, "noResult": 0, "nrr": 0.288, "quotient": "849/99.3", "for": "797/96.4", "points": 6, "form": ["W", "L", "W", "L", "W"] },
+    { "rank": 4, "team": "auscon-melbourne-united", "played": 5, "won": 2, "lost": 3, "drawn": 0, "tied": 0, "noResult": 0, "nrr": 0.298, "quotient": "831/98.1", "for": "799/97.5", "points": 4, "form": ["W", "L", "L", "W", "L"] },
+    { "rank": 5, "team": "melbourne-tuskers", "played": 5, "won": 2, "lost": 3, "drawn": 0, "tied": 0, "noResult": 0, "nrr": -0.274, "quotient": "871/96.2", "for": "885/95", "points": 4, "form": ["L", "L", "W", "W", "L"] },
+    { "rank": 6, "team": "melbourne-cobras", "played": 5, "won": 1, "lost": 4, "drawn": 0, "tied": 0, "noResult": 0, "nrr": -0.898, "quotient": "764/100", "for": "851/99.4", "points": 2, "form": ["L", "L", "L", "W", "L"] }
+  ]
+}

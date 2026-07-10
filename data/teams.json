@@ -1,0 +1,54 @@
+{
+  "_comment": "One entry per franchise. 'logo' points to assets/img/teams/<slug>.png — drop a file there with that exact name and it replaces the auto-generated crest automatically, no code changes needed. See docs/CONTENT-GUIDE.md.",
+  "teams": [
+    {
+      "slug": "melbourne-bulls",
+      "name": "Melbourne Bulls",
+      "sourceName": "MELBOURNE BULLS",
+      "accent": "#5B2EE0",
+      "logo": "assets/img/teams/melbourne-bulls.png",
+      "blurb": "One of MSL Premiers' most consistent line-ups, anchored by explosive top-order batting."
+    },
+    {
+      "slug": "melbourne-pirates",
+      "name": "Melbourne Pirates",
+      "sourceName": "Melbourne Pirates",
+      "accent": "#1B0F4A",
+      "logo": "assets/img/teams/melbourne-pirates.png",
+      "blurb": "A balanced squad built around disciplined bowling and sharp fielding."
+    },
+    {
+      "slug": "melbourne-thunders",
+      "name": "Melbourne Thunders",
+      "sourceName": "Melbourne Thunders",
+      "accent": "#D8F84C",
+      "accentText": "#14102B",
+      "logo": "assets/img/teams/melbourne-thunders.png",
+      "blurb": "League leaders across the regular season, driven by all-round depth."
+    },
+    {
+      "slug": "auscon-melbourne-united",
+      "name": "Auscon Melbourne United",
+      "sourceName": "AUSCON MELBOURNE UNITED CRICKET",
+      "accent": "#8B6BEE",
+      "logo": "assets/img/teams/auscon-melbourne-united.png",
+      "blurb": "A deep, versatile roster with strength across both batting and bowling departments."
+    },
+    {
+      "slug": "melbourne-tuskers",
+      "name": "Melbourne Tuskers",
+      "sourceName": "MELBOURNE TUSKERS - MSL Premiers",
+      "accent": "#3810A8",
+      "logo": "assets/img/teams/melbourne-tuskers.png",
+      "blurb": "Featuring MSL Premiers' leading run-scorer, the Tuskers bring genuine match-winning power."
+    },
+    {
+      "slug": "melbourne-cobras",
+      "name": "Melbourne Cobras",
+      "sourceName": "Melbourne Cobras",
+      "accent": "#2B1080",
+      "logo": "assets/img/teams/melbourne-cobras.png",
+      "blurb": "A young, ambitious squad looking to climb the MSL Premiers table."
+    }
+  ]
+}

@@ -1,0 +1,1037 @@
+/*!
+ * Melbourne Super League — site stylesheet
+ * Design direction: bold multicultural sport-brand system built directly off
+ * the MSL Premiers crest (deep indigo-violet + electric lime, near-black ink).
+ * Typography: Big Shoulders (condensed display, scoreboard energy) paired
+ * with Chakra Petch (technical/HUD-flavoured body & data font) — inspired by
+ * the Nitro sports template's pairing, tuned for long-form readability.
+ * Structure/rhythm inspired by the Nitro template (hero -> stat strip ->
+ * competition highlights -> standings -> news -> gallery -> footer),
+ * rebuilt from scratch for cricket rather than reusing soccer imagery.
+ * ------------------------------------------------------------------ */
+
+/* Fonts are loaded via <link rel="preconnect"/"stylesheet"> in each page's
+   <head> (not @import) so the browser can start fetching them immediately,
+   in parallel with this stylesheet, instead of waiting to discover them
+   after main.css has already downloaded. See docs/CONTENT-GUIDE.md. */
+
+:root {
+  /* ---- Brand palette (sourced from MSL Premiers crest, 01.png) ---- */
+  --msl-ink: #120B2E;          /* near-black indigo — primary text */
+  --msl-ink-soft: #4B4560;     /* secondary text */
+  --msl-purple-950: #0A0620;   /* deepest bg (footer, dark sections) */
+  --msl-purple-900: #150A38;   /* dark bg alt */
+  --msl-purple-800: #22114F;
+  --msl-purple-700: #3810A8;   /* crest shield purple */
+  --msl-violet-600: #4A22C4;
+  --msl-violet-500: #5B2EE0;   /* primary accent / buttons / links */
+  --msl-violet-400: #7C52EA;
+  --msl-lime-400: #D8F84C;     /* crest lime — secondary accent */
+  --msl-lime-300: #E7FB86;
+  --msl-lime-050: #F8FFE3;
+  --msl-cream: #F7F6FB;        /* page background, not pure white */
+  --msl-white: #FFFFFF;
+  --msl-line: #E6E2F2;
+  --msl-line-dark: rgba(255,255,255,0.14);
+  --msl-red: #C1272D;
+  --msl-green: #12703A;
+
+  /* ---- Type ---- */
+  --font-display: "Big Shoulders", sans-serif;
+  --font-body: "Chakra Petch", sans-serif;
+
+  --fs-h1: clamp(2.75rem, 2rem + 3.4vw, 6.25rem);
+  --fs-h2: clamp(2.1rem, 1.7rem + 2vw, 3.6rem);
+  --fs-h3: clamp(1.5rem, 1.3rem + 0.9vw, 2.1rem);
+  --fs-h4: clamp(1.2rem, 1.1rem + 0.4vw, 1.5rem);
+  --fs-h5: 1.125rem;
+  --fs-eyebrow: 0.8rem;
+  --fs-lg: 1.25rem;
+  --fs-body: 1rem;
+  --fs-sm: 0.875rem;
+  --fs-xs: 0.75rem;
+
+  --container: 1256px;
+  --container-narrow: 860px;
+  --section-pad: clamp(64px, 8vw, 128px);
+  --radius: 4px;
+  --radius-lg: 10px;
+  --shadow-card: 0 4px 24px rgba(18, 11, 46, 0.07);
+  --shadow-pop: 0 18px 48px rgba(18, 11, 46, 0.18);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ==========================================================================
+   Reset & base
+   ========================================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; overflow-x: hidden; width: 100%; }
+body {
+  margin: 0;
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.65;
+  color: var(--msl-ink-soft);
+  background: var(--msl-cream);
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; }
+input, textarea, select { font: inherit; }
+/* Safety default: our icon() helper injects raw <svg> with no width/height
+   attributes. Without an explicit size, browsers render unsized inline SVG
+   at their intrinsic default (~300px), which is what caused icons to blow
+   up huge wherever a specific size rule was missing. Every icon context
+   below sets its own size and wins on specificity — this is just the floor. */
+svg { display: inline-block; width: 20px; height: 20px; flex-shrink: 0; vertical-align: middle; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--msl-ink);
+  margin: 0;
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+h1, h2, h3, h4, h5, h6, p { overflow-wrap: break-word; word-break: break-word; }
+h1 { font-size: var(--fs-h1); font-weight: 900; letter-spacing: -0.02em; text-wrap: balance; }
+h2 { font-size: var(--fs-h2); text-wrap: balance; }
+h3 { font-size: var(--fs-h3); }
+h4 { font-size: var(--fs-h4); }
+h5 { font-size: var(--fs-h5); text-transform: none; font-weight: 700; }
+
+p { margin: 0 0 1rem; }
+p:last-child { margin-bottom: 0; }
+.lede, .section-head p { text-wrap: pretty; }
+
+.container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 20px; }
+.container-narrow { width: 100%; max-width: var(--container-narrow); margin: 0 auto; padding: 0 20px; }
+@media (min-width: 560px) {
+  .container, .container-narrow { padding: 0 24px; }
+}
+
+section { position: relative; }
+.section-pad { padding-top: var(--section-pad); padding-bottom: var(--section-pad); }
+.section-pad-sm { padding-top: clamp(40px, 5vw, 72px); padding-bottom: clamp(40px, 5vw, 72px); }
+
+.bg-cream { background: var(--msl-cream); }
+.bg-white { background: var(--msl-white); }
+.bg-dark {
+  background: var(--msl-purple-950);
+  color: rgba(255,255,255,0.78);
+}
+.bg-dark h1, .bg-dark h2, .bg-dark h3, .bg-dark h4 { color: var(--msl-white); }
+.bg-violet { background: var(--msl-violet-500); color: rgba(255,255,255,0.92); }
+.bg-violet h1, .bg-violet h2, .bg-violet h3 { color: var(--msl-white); }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-body);
+  font-size: var(--fs-eyebrow);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--msl-violet-500);
+  margin-bottom: 14px;
+}
+.bg-dark .eyebrow, .bg-violet .eyebrow { color: var(--msl-lime-400); }
+.eyebrow::before {
+  content: "";
+  width: 26px;
+  height: 2px;
+  background: currentColor;
+  display: inline-block;
+}
+
+.section-head { max-width: 720px; margin-bottom: 48px; }
+.section-head.center { margin-left: auto; margin-right: auto; text-align: center; }
+.section-head p { font-size: var(--fs-lg); margin-top: 16px; }
+
+.lede { font-size: var(--fs-lg); color: var(--msl-ink); line-height: 1.6; }
+
+::selection { background: var(--msl-lime-400); color: var(--msl-ink); }
+
+/* Skip link */
+.skip-link {
+  position: absolute; left: -9999px; top: 0; z-index: 999;
+  background: var(--msl-violet-500); color: #fff; padding: 12px 20px;
+}
+.skip-link:focus { left: 12px; top: 12px; }
+
+/* Focus states */
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid var(--msl-lime-400);
+  outline-offset: 3px;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 17px 30px;
+  min-height: 52px;
+  border-radius: var(--radius);
+  border: 2px solid transparent;
+  transition: transform 0.35s var(--ease), background-color 0.3s var(--ease), color 0.3s var(--ease), border-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+  white-space: nowrap;
+}
+.btn svg { width: 18px; height: 18px; transition: transform 0.3s var(--ease); }
+.btn:hover svg { transform: translateX(3px); }
+.btn:active { transform: translateY(1px); }
+
+.btn-primary { background: var(--msl-violet-500); color: #fff; }
+.btn-primary:hover { background: var(--msl-violet-600); box-shadow: var(--shadow-pop); }
+
+.btn-lime { background: var(--msl-lime-400); color: var(--msl-ink); }
+.btn-lime:hover { background: var(--msl-lime-300); box-shadow: var(--shadow-pop); }
+
+.btn-outline { background: transparent; color: var(--msl-white); border-color: rgba(255,255,255,0.4); }
+.btn-outline:hover { background: rgba(255,255,255,0.12); border-color: #fff; }
+
+.btn-outline-dark { background: transparent; color: var(--msl-ink); border-color: var(--msl-line); }
+.btn-outline-dark:hover { border-color: var(--msl-violet-500); color: var(--msl-violet-500); }
+
+.btn-block { width: 100%; }
+.btn-sm { padding: 12px 20px; min-height: 40px; font-size: var(--fs-xs); }
+
+.link-arrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-weight: 700; font-size: var(--fs-sm); letter-spacing: 0.04em;
+  text-transform: uppercase; color: var(--msl-violet-500);
+  border-bottom: 2px solid transparent; padding-bottom: 2px;
+  transition: border-color 0.3s var(--ease), gap 0.3s var(--ease);
+}
+.link-arrow svg { width: 16px; height: 16px; transition: transform 0.3s var(--ease); }
+.link-arrow:hover { border-color: currentColor; gap: 12px; }
+.link-arrow:hover svg { transform: translateX(2px); }
+
+/* ==========================================================================
+   Header / Nav
+   ========================================================================== */
+/* Transparent overlay by default — floats directly over the hero/page-hero
+   dark banner with no visible bar, exactly like Nitro's header-1 (which is
+   position:absolute with no background at all until scrolled). JS adds
+   .is-scrolled past a scroll threshold to swap it to a solid fixed bar. */
+.site-header {
+  position: absolute;
+  top: 0; left: 0; width: 100%;
+  z-index: 200;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+.site-header.is-scrolled {
+  position: fixed;
+  background: rgba(10, 6, 32, 0.94);
+  backdrop-filter: blur(10px);
+  border-bottom-color: var(--msl-line-dark);
+  box-shadow: 0 8px 30px rgba(10,6,32,0.25);
+  animation: headerSlideDown 0.4s var(--ease);
+}
+@keyframes headerSlideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .site-header.is-scrolled { animation: none; }
+}
+.site-header .container { display: flex; align-items: center; justify-content: space-between; height: 84px; gap: 12px; }
+/* Logo only — no wordmark next to it, sized up so it carries the header's
+   visual weight on its own (Nitro's wordmark logo reads large for the same
+   reason: it's the only thing on the left). */
+.brand { display: flex; align-items: center; color: #fff; min-width: 0; }
+.brand img { height: 66px; width: auto; flex-shrink: 0; }
+
+@media (min-width: 1101px) {
+  .site-header .container { height: 116px; gap: 24px; }
+  .brand img { height: 96px; }
+}
+
+/* Nav typography matches Nitro's exactly: body font (not the display
+   font), 16px/700/uppercase, generous letter-spacing, wide gaps between
+   items instead of padded pill hit-areas. */
+.nav-primary { display: flex; align-items: center; gap: 42px; }
+.nav-primary > a, .nav-dropdown-toggle {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 20px 0;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #fff;
+  background: none; border: none; cursor: pointer;
+  transition: color 0.25s var(--ease);
+}
+.nav-dropdown-toggle svg { width: 14px; height: 14px; transition: transform 0.25s var(--ease); }
+.nav-primary > a:hover, .nav-dropdown-toggle:hover,
+.nav-primary > a[aria-current="page"] { color: var(--msl-lime-400); }
+.nav-dropdown { position: relative; }
+.nav-dropdown:hover .nav-dropdown-toggle svg { transform: rotate(180deg); }
+.nav-dropdown-menu {
+  position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%) translateY(-6px);
+  min-width: 220px; background: var(--msl-white); border-radius: var(--radius);
+  padding: 10px 0; box-shadow: var(--shadow-pop); border-top: 4px solid var(--msl-lime-400);
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.25s var(--ease), transform 0.25s var(--ease), visibility 0.25s;
+  z-index: 50;
+}
+.nav-dropdown:hover .nav-dropdown-menu, .nav-dropdown:focus-within .nav-dropdown-menu,
+.nav-dropdown.is-open .nav-dropdown-menu {
+  opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0);
+}
+.nav-dropdown-menu a {
+  display: block; padding: 10px 22px; font-family: var(--font-body);
+  font-size: 0.82rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.01em; color: var(--msl-ink); white-space: nowrap;
+}
+.nav-dropdown-menu a:hover { color: var(--msl-violet-500); background: var(--msl-lime-050); }
+
+/* Header-right: CTA + hamburger sit side by side and both stay visible at
+   every breakpoint — the hamburger isn't a mobile-only fallback here, it's
+   always the way into the offcanvas panel, same as the reference site. */
+.header-actions { display: flex; align-items: center; gap: 20px; }
+/* Header CTA sized to Nitro's theme-btn: 58px tall, 34px horizontal pad,
+   16px/700 uppercase — a prominent bar, not a small pill. Overrides the
+   default .btn-sm treatment carried in the markup. */
+.header-actions .btn-primary {
+  min-height: 58px; padding: 0 34px;
+  font-size: 1rem; letter-spacing: 0.03em;
+}
+.nav-toggle {
+  display: inline-flex;
+  width: 56px; height: 56px;
+  align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  color: #fff;
+  flex-shrink: 0;
+  transition: background-color 0.25s var(--ease);
+}
+.nav-toggle:hover { background: rgba(255,255,255,0.2); }
+.nav-toggle svg { width: 26px; height: 26px; }
+
+@media (max-width: 1100px) {
+  .nav-primary { display: none; }
+  .header-actions .btn-primary { display: none; }
+}
+
+/* ---- Offcanvas side panel (hamburger target) ----
+   A fixed-width panel from the right + dimmed backdrop, not a full-screen
+   takeover — matches Nitro's offcanvas__info exactly: logo/close, a short
+   blurb, the same nav list as an accordion, a photo, contact details, a
+   CTA and social row. */
+.mobile-nav-overlay {
+  position: fixed; inset: 0; z-index: 290;
+  background: rgba(10,6,32,0.65);
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+.mobile-nav-overlay.is-open { opacity: 1; visibility: visible; }
+.mobile-nav {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 300;
+  width: min(420px, 88vw);
+  background: var(--msl-purple-950);
+  transform: translateX(100%);
+  transition: transform 0.45s var(--ease);
+  display: flex; flex-direction: column;
+  overflow-y: auto;
+  box-shadow: -30px 0 60px rgba(0,0,0,0.35);
+}
+.mobile-nav.is-open { transform: translateX(0); }
+.mobile-nav-top { display: flex; align-items: center; justify-content: space-between; padding: 28px 28px 0; flex-shrink: 0; }
+.mobile-nav-top img { height: 44px; width: auto; }
+.mobile-nav-close { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #fff; background: rgba(255,255,255,0.1); border-radius: 50%; }
+.mobile-nav-close svg { width: 18px; height: 18px; }
+.mobile-nav-desc { padding: 22px 28px 0; font-size: var(--fs-sm); line-height: 1.7; color: rgba(255,255,255,0.65); }
+.mobile-nav-links { padding: 20px 28px; display: flex; flex-direction: column; }
+/* Desktop (top nav visible, ≥1101px): the offcanvas nav list is redundant
+   with the header nav, so hide it — the panel then shows only blurb, image,
+   contact info, CTA and social, exactly like Nitro's desktop offcanvas.
+   Below 1101px (top nav hidden) the nav list is the primary navigation. */
+@media (min-width: 1101px) {
+  .mobile-nav-links { display: none; }
+}
+.mobile-nav-links > a, .mobile-nav-accordion-toggle {
+  padding: 15px 0; font-family: var(--font-body); font-weight: 700; font-size: 1rem;
+  letter-spacing: 0.02em; text-transform: uppercase; color: #fff;
+  display: flex; align-items: center; justify-content: space-between;
+  background: none; border: none;
+  width: 100%; text-align: left; cursor: pointer;
+}
+.mobile-nav-links > a { border-bottom: 1px solid var(--msl-line-dark); }
+.mobile-nav-links > a[aria-current="page"] { color: var(--msl-lime-400); }
+.mobile-nav-accordion { border-bottom: 1px solid var(--msl-line-dark); }
+.mobile-nav-accordion-toggle svg { width: 15px; height: 15px; transition: transform 0.3s var(--ease); }
+.mobile-nav-accordion.is-open .mobile-nav-accordion-toggle svg { transform: rotate(180deg); }
+.mobile-nav-accordion-panel { max-height: 0; overflow: hidden; transition: max-height 0.35s var(--ease); }
+.mobile-nav-accordion.is-open .mobile-nav-accordion-panel { max-height: 260px; }
+.mobile-nav-accordion-panel a {
+  display: block; padding: 10px 0 10px 18px; font-family: var(--font-body);
+  font-size: 0.85rem; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+}
+.mobile-nav-accordion-panel a:hover { color: var(--msl-lime-400); }
+.mobile-nav-image { margin: 4px 28px 0; border-radius: var(--radius-lg); overflow: hidden; flex-shrink: 0; }
+.mobile-nav-image img { width: 100%; height: 150px; object-fit: cover; display: block; }
+.mobile-nav-contact { padding: 24px 28px 32px; }
+.mobile-nav-contact h4 { color: #fff; font-size: 0.95rem; margin-bottom: 16px; }
+.mobile-nav-contact ul { display: flex; flex-direction: column; gap: 14px; margin-bottom: 22px; }
+.mobile-nav-contact li { display: flex; align-items: center; gap: 12px; }
+.mobile-nav-contact-icon {
+  width: 36px; height: 36px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.1); border-radius: 50%; color: var(--msl-lime-400);
+}
+.mobile-nav-contact-icon svg { width: 15px; height: 15px; }
+.mobile-nav-contact a, .mobile-nav-contact span { color: rgba(255,255,255,0.75); font-size: var(--fs-sm); }
+.mobile-nav-contact .social-row { margin-top: 22px; }
+body.nav-open { overflow: hidden; }
+
+/* ==========================================================================
+   Breadcrumb / inner page header
+   ========================================================================== */
+.page-hero {
+  position: relative;
+  padding: clamp(90px, 14vw, 160px) 0 clamp(56px, 8vw, 96px);
+  background: var(--msl-purple-950);
+  color: rgba(255,255,255,0.8);
+  overflow: hidden;
+}
+.page-hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(720px 420px at 85% -10%, rgba(216,248,76,0.14), transparent 60%),
+    radial-gradient(600px 500px at -5% 110%, rgba(91,46,224,0.35), transparent 60%);
+  pointer-events: none;
+}
+.page-hero .container { position: relative; z-index: 1; }
+.page-hero h1 { color: #fff; }
+.breadcrumb { display: flex; gap: 8px; align-items: center; font-size: var(--fs-xs); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 18px; color: rgba(255,255,255,0.55); }
+.breadcrumb a:hover { color: var(--msl-lime-400); }
+.breadcrumb svg { width: 12px; height: 12px; opacity: 0.6; }
+
+/* ==========================================================================
+   Hero (home) — ported structurally from the Nitro template's hero-1: a
+   single large torn/angular photo pinned full-bleed to the section's right
+   edge with a colour shard peeking out behind it, dark backdrop with a very
+   faint full-bleed photo for texture, and a narrower text column on the
+   left that never fights the visual for space. Nitro cuts hero1.png to its
+   silhouette in an image editor and layers a second PNG shard behind it;
+   here both are CSS clip-path polygons on ordinary rectangular photos, so
+   any photo can drop in without needing background removal.
+   ========================================================================== */
+/* Mobile-first: block flow (text column, then the player visual below).
+   Desktop (981px+) switches to a centered flex row and pins the visual
+   to the right edge absolutely, like Nitro's hero-1. */
+.hero {
+  position: relative;
+  color: #fff;
+  background: var(--msl-purple-950);
+  overflow: hidden;
+  width: 100%;
+  padding-top: clamp(80px, 11vw, 110px);
+  padding-bottom: 0;
+}
+@media (min-width: 992px) {
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-bottom: 0;
+  }
+}
+/* Full-bleed background photo covering the whole hero, exactly like Nitro's
+   hero-bg.jpg (bg-cover). It's a real rectangular photo now, so object-fit:
+   cover fills every corner without letterboxing; the gradient wash on top
+   (.hero::before) knocks it back so the headline stays legible. */
+.hero-bg-photo {
+  position: absolute; inset: 0; z-index: 0;
+  opacity: 0.55;
+}
+.hero-bg-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.hero::before {
+  content: "";
+  position: absolute; inset: 0; z-index: 1;
+  background:
+    linear-gradient(100deg, rgba(10,6,32,0.82) 0%, rgba(10,6,32,0.58) 45%, rgba(10,6,32,0.35) 65%, rgba(10,6,32,0.15) 100%),
+    radial-gradient(760px 460px at 92% -10%, rgba(216,248,76,0.14), transparent 60%);
+  pointer-events: none;
+}
+/* Wider than the site's default 1256px container (Nitro's hero container is
+   1720px) so on wide screens the copy sits near the left edge instead of
+   getting pushed toward centre by a narrow centred column. */
+.hero-inner { position: relative; z-index: 2; width: 100%; }
+@media (min-width: 1400px) {
+  .hero-inner { max-width: 1720px; }
+}
+/* Mobile-first: centered stack, same as Nitro's phone layout. Desktop
+   switches to the left-aligned editorial column. */
+.hero-content { max-width: 620px; margin-inline: auto; text-align: center; }
+/* Eyebrow matches Nitro's hero h6: body font, ~20px, weight 700, 14px
+   gap below (Nitro "OFFICIAL HOME OF CHAMPIONS"). */
+.hero-content .eyebrow {
+  font-weight: bold;
+
+    color: var(--msl-lime-400);
+
+    gap: 0;
+
+    margin-bottom: 4px;
+
+    font-size: clamp(0.85rem, 0.7rem + 0.6vw, 1.35rem);
+}
+.hero-content .eyebrow::before { content: none; }
+/* Headline sizing replicates Nitro's hero-1 h1 breakpoint ladder exactly:
+   42 → 48 → 55 → 68 → 62 → 75 → 100px, letter-spacing -1px. The dip to
+   62px in the 992–1199 band is intentional (Nitro's cramped 2-column
+   desktop); it jumps back up once the visual pins to the far right. */
+.hero-content h1 {
+  color: #fff; max-width: 100%;
+  font-size: 42px;
+  letter-spacing: -1px;
+  line-height: 1.02;
+}
+@media (min-width: 471px)  { .hero-content h1 { font-size: 48px; } }
+@media (min-width: 576px)  { .hero-content h1 { font-size: 55px; } }
+@media (min-width: 768px)  { .hero-content h1 { font-size: 68px; } }
+@media (min-width: 992px)  { .hero-content h1 { font-size: 62px; } }
+@media (min-width: 1200px) { .hero-content h1 { font-size: 75px; } }
+@media (min-width: 1601px) { .hero-content h1 { font-size: 100px; } }
+.hero-content .lede {
+  color: rgba(255,255,255,0.85); max-width: 50ch;
+  margin-top: 24px; margin-inline: auto;
+  line-height: 1.5;
+  font-size: clamp(1rem, 0.95rem + 0.35vw, 1.15rem);
+}
+/* Nitro hero-btn: margin-top 48px, gap 24px; buttons 58px tall, 34px pad. */
+.hero-actions { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 40px; justify-content: center; }
+.hero-actions .btn { min-height: 58px; padding: 0 34px; }
+@media (min-width: 992px) {
+  .hero-content { margin-inline: 0; text-align: left; max-width: 640px; }
+  .hero-content h1 { max-width: 15ch; }
+  .hero-content .lede { margin-inline: 0; }
+  .hero-actions { justify-content: flex-start; margin-top: 48px; }
+}
+
+/* Headline word-stagger entrance — each word is its own inline-block span
+   (see main.js splitHeroTitle) offset below/rotated, animated up+in with a
+   per-word transition-delay. Mirrors the Nitro template's SplitText+GSAP
+   char-stagger, minus the paid GSAP plugin. */
+.hero-title .word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(60%) rotate(3deg);
+  transition: opacity 0.7s var(--ease), transform 0.8s var(--ease);
+}
+.hero-title.is-revealed .word { opacity: 1; transform: none; }
+/* Nitro's accent word is a transparent fill + coloured stroke ("hollow"
+   text), not a solid colour swap — keeps the word readable as part of the
+   headline's weight/rhythm while still standing out. */
+.hero-title .word.accent {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--msl-lime-400);
+  text-stroke: 2px var(--msl-lime-400);
+}
+
+/* Player cutout layering — same recipe as Nitro's hero-1: an angular
+   colour shard (their hero-image.png, our clip-path polygon) pinned
+   behind, and the transparent-PNG player (their hero1.png) standing in
+   front of it, bottom-anchored so he "stands on" the section's bottom
+   edge. Mobile-first: the base styles are the stacked-below-text layout;
+   the min-width query pins the visual to the right edge on desktop. */
+/* z-index: 2 lifts the player above .hero::before (z-index: 1) — the
+   dark gradient wash is there to knock back the faint background
+   illustration behind the text, not to dim the hero player himself. */
+.hero-visual {
+  position: relative; z-index: 2;
+  width: 100%;
+  height: clamp(340px, 92vw, 480px);
+  margin-top: 40px;
+  perspective: 1000px;
+}
+.hero-visual-shard {
+  position: absolute;
+  left: 50%; bottom: 6%;
+  width: min(78vw, 420px); height: 82%;
+  transform: translateX(-50%) skewX(-12deg);
+  background: linear-gradient(160deg, var(--msl-violet-400) 0%, var(--msl-violet-500) 48%, var(--msl-purple-700) 100%);
+  clip-path: polygon(30% 0%, 100% 0%, 70% 100%, 0% 100%, 0% 62%, 30% 52%);
+}
+/* Centred with auto margins, NOT translateX(-50%): the mouse-tilt effect
+   (main.js) writes `transform: perspective() rotate() scale()` to this
+   element, which would clobber a centring translate and make the player
+   jump sideways the moment the cursor moves. Auto-margin centring leaves
+   the transform property free for the tilt. */
+.hero-visual-photo {
+  position: absolute; z-index: 1;
+  left: 0; right: 0; margin-inline: auto; bottom: 0;
+  width: min(88vw, 480px);
+  transition: transform 0.2s ease;
+  will-change: transform;
+}
+.hero-visual-photo img {
+  width: 100%; height: auto;
+  filter: drop-shadow(0 24px 48px rgba(10, 6, 32, 0.55));
+}
+@media (min-width: 992px) {
+  /* The visual group's right edge aligns to the 1720px hero container's
+     right gutter (max(24px, (100vw-1720px)/2)) instead of the raw viewport
+     edge — so the player sits center-right within the layout like Nitro's,
+     rather than bleeding off the right of the screen. */
+  .hero-visual {
+    position: absolute; top: 0; bottom: 0; left: auto;
+    right: max(24px, calc((100vw - 1720px) / 2));
+    width: min(56vw, 900px); height: auto; margin-top: 0;
+    pointer-events: none;
+  }
+  /* Shard sits behind the player's head/shoulders in the upper half of
+     the section (like Nitro's orange slab), not as a full-height wall —
+     the player is the dominant element, the shard is the accent. It's
+     offset toward the right so it peeks out past the player's shoulder. */
+  .hero-visual-shard {
+    left: auto; right: 2%; top: 8%; bottom: auto;
+    width: min(24vw, 430px); height: 64%;
+    transform: skewX(-14deg);
+  }
+  /* Centred inside the (wider) visual box via auto margins so the player
+     sits ~70% across the viewport (Nitro's centre-right placement) with the
+     shard peeking out to his right — and the tilt transform stays free. */
+  .hero-visual-photo {
+    left: 0; right: 0; margin-inline: auto; bottom: 0;
+    width: min(48vw, 860px);
+  }
+}
+
+.hero-scroll {
+  position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  font-size: var(--fs-xs); letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.55);
+  z-index: 2;
+}
+.hero-scroll svg { width: 16px; height: 16px; animation: bob 1.8s ease-in-out infinite; }
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+/* The scroll cue is a full-viewport-hero affordance — once the visual
+   drops into normal flow below the text (same breakpoint as above) the
+   hero's height is just its content height, so an absolutely-positioned
+   "bottom" cue ends up overlapping the photo instead of the section's true
+   bottom edge. Simpler to drop it there. */
+@media (max-width: 980px) {
+  .hero-scroll { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-title .word { opacity: 1; transform: none; transition: none; }
+  .hero-visual-photo { transition: none; }
+  .hero-scroll svg { animation: none; }
+}
+
+/* ==========================================================================
+   Stat strip
+   ========================================================================== */
+.stat-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); border-top: 1px solid var(--msl-line-dark); }
+.stat-strip.on-light { border-top-color: var(--msl-line); }
+.stat-item { padding: 24px 16px; text-align: center; border-left: 1px solid var(--msl-line-dark); display: flex; flex-direction: column; justify-content: center; }
+.stat-strip.on-light .stat-item { border-left-color: var(--msl-line); }
+.stat-item:first-child { border-left: none; }
+.stat-value { font-family: var(--font-display); font-weight: 900; font-size: clamp(1.6rem, 1.3rem + 1.4vw, 3rem); color: var(--msl-lime-400); line-height: 1; }
+.stat-strip.on-light .stat-value { color: var(--msl-violet-500); }
+/* Reserve two lines of height for every label so short ("RUNS") and long
+   ("50+ PARTNERSHIP") labels keep every cell in the row the same height
+   instead of some wrapping to 2 lines and others sitting on 1. */
+.stat-label {
+  display: block; margin-top: 8px; font-size: var(--fs-xs); line-height: 1.35;
+  letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.6);
+  min-height: calc(var(--fs-xs) * 1.35 * 2);
+}
+.stat-strip.on-light .stat-label { color: var(--msl-ink-soft); }
+
+/* ==========================================================================
+   Grid utilities
+   ========================================================================== */
+/* minmax(0, 1fr) rather than bare 1fr: grid tracks default to a min
+   width of "auto", which means a track won't shrink below the intrinsic
+   width of wide content inside it (like the min-width:640px data tables).
+   Without the 0 floor, wide children silently blow out their column,
+   overflow the page, and get clipped by html/body's overflow-x:hidden
+   with no scrollbar — exactly what broke the standings preview on mobile. */
+.grid { display: grid; gap: 28px; }
+.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 980px) { .grid-3, .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: minmax(0, 1fr); } }
+
+/* ==========================================================================
+   Cards
+   ========================================================================== */
+.card {
+  background: var(--msl-white);
+  border: 1px solid var(--msl-line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease), border-color 0.4s var(--ease);
+}
+.card:hover { transform: translateY(-6px); box-shadow: var(--shadow-pop); border-color: transparent; }
+
+.pillar-card { padding: 32px 28px; }
+.pillar-card .pillar-icon {
+  width: 54px; height: 54px; border-radius: var(--radius);
+  background: var(--msl-lime-050); color: var(--msl-violet-500);
+  display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
+}
+.pillar-card .pillar-icon svg { width: 26px; height: 26px; }
+.pillar-card h3 { font-size: var(--fs-h4); margin-bottom: 10px; }
+.pillar-card p { font-size: var(--fs-sm); }
+
+.news-card { display: flex; flex-direction: column; }
+.news-card .news-thumb { aspect-ratio: 4/3; overflow: hidden; background: var(--msl-purple-900); }
+.news-card .news-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease); }
+.card:hover .news-thumb img { transform: scale(1.06); }
+.news-card .news-body { padding: 24px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.news-meta { display: flex; gap: 12px; align-items: center; font-size: var(--fs-xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--msl-violet-500); font-weight: 700; }
+.news-card h3 { font-size: 1.35rem; line-height: 1.15; }
+.news-card p { font-size: var(--fs-sm); color: var(--msl-ink-soft); }
+
+.tag {
+  display: inline-flex; align-items: center;
+  padding: 4px 10px; border-radius: 999px;
+  background: var(--msl-lime-050); color: var(--msl-violet-600);
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+}
+
+/* Team card */
+.team-card { padding: 30px 26px; text-align: center; }
+.team-crest { width: 88px; height: 88px; margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; border-radius: 50%; flex-shrink: 0; }
+.team-crest img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
+.team-crest.is-generated { color: var(--msl-white); font-family: var(--font-display); font-weight: 900; font-size: 1.6rem; }
+.team-crest.crest-inline { margin: 0; }
+.team-card h3 { font-size: var(--fs-h4); margin-bottom: 8px; }
+.team-card p { font-size: var(--fs-sm); margin-bottom: 18px; }
+.team-rank-pill { display: inline-block; font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--msl-ink-soft); margin-bottom: 12px; }
+
+/* Gallery */
+.gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.gallery-grid a { position: relative; display: block; aspect-ratio: 1; overflow: hidden; border-radius: var(--radius); }
+.gallery-grid img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease); }
+.gallery-grid a:hover img { transform: scale(1.08); }
+.gallery-grid a::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(10,6,32,0.5), transparent 45%); opacity: 0; transition: opacity 0.3s var(--ease); }
+.gallery-grid a:hover::after { opacity: 1; }
+@media (max-width: 900px) { .gallery-grid { grid-template-columns: repeat(3,1fr); } }
+@media (max-width: 600px) { .gallery-grid { grid-template-columns: repeat(2,1fr); gap: 10px; } }
+
+.album-card { display: block; }
+.album-card .album-cover { aspect-ratio: 3/2; overflow: hidden; border-radius: var(--radius-lg); position: relative; }
+.album-card .album-cover img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease); }
+.album-card:hover .album-cover img { transform: scale(1.06); }
+.album-card .album-info { padding: 18px 4px 0; }
+.album-card h3 { font-size: 1.3rem; }
+.album-card .news-meta { margin-top: 6px; }
+
+/* Lightbox */
+.lightbox { position: fixed; inset: 0; z-index: 500; background: rgba(10,6,32,0.94); display: none; align-items: center; justify-content: center; padding: 32px; }
+.lightbox.is-open { display: flex; }
+.lightbox img { max-width: min(92vw, 1100px); max-height: 84vh; object-fit: contain; border-radius: 4px; }
+.lightbox-close, .lightbox-prev, .lightbox-next {
+  position: absolute; width: 50px; height: 50px; border-radius: 50%;
+  background: rgba(255,255,255,0.1); color: #fff; display: flex; align-items: center; justify-content: center;
+  transition: background-color 0.25s var(--ease);
+}
+.lightbox-close:hover, .lightbox-prev:hover, .lightbox-next:hover { background: rgba(255,255,255,0.22); }
+.lightbox-close { top: 24px; right: 24px; }
+.lightbox-prev { left: 24px; top: 50%; transform: translateY(-50%); }
+.lightbox-next { right: 24px; top: 50%; transform: translateY(-50%); }
+.lightbox-close svg, .lightbox-prev svg, .lightbox-next svg { width: 22px; height: 22px; }
+@media (max-width: 640px) { .lightbox-prev, .lightbox-next { display: none; } }
+
+/* ==========================================================================
+   Timeline (Our Story)
+   ========================================================================== */
+.timeline { position: relative; max-width: 880px; margin: 0 auto; }
+.timeline::before { content: ""; position: absolute; left: 120px; top: 0; bottom: 0; width: 2px; background: var(--msl-line); }
+.timeline-item { position: relative; display: grid; grid-template-columns: 96px 1fr; gap: 32px; padding: 0 0 48px 0; }
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-year { font-family: var(--font-display); font-weight: 900; font-size: 1.1rem; color: var(--msl-violet-500); text-align: right; padding-top: 4px; }
+.timeline-dot { position: absolute; left: 116px; top: 8px; width: 10px; height: 10px; border-radius: 50%; background: var(--msl-lime-400); border: 3px solid var(--msl-cream); box-shadow: 0 0 0 2px var(--msl-violet-500); }
+.timeline-body h3 { font-size: 1.3rem; margin-bottom: 8px; }
+.timeline-body p { font-size: var(--fs-sm); }
+@media (max-width: 700px) {
+  .timeline::before { left: 6px; }
+  .timeline-item { grid-template-columns: 1fr; gap: 8px; padding-left: 28px; }
+  .timeline-dot { left: 2px; }
+  .timeline-year { text-align: left; }
+}
+
+/* ==========================================================================
+   Values grid
+   ========================================================================== */
+.value-item { display: flex; gap: 18px; align-items: flex-start; padding: 22px 0; border-top: 1px solid var(--msl-line); }
+.value-item:first-child { border-top: none; padding-top: 0; }
+.value-num { font-family: var(--font-display); font-weight: 900; font-size: 1.6rem; color: var(--msl-line); width: 48px; flex-shrink: 0; }
+.value-item h4 { font-size: 1.1rem; margin-bottom: 6px; }
+.value-item p { font-size: var(--fs-sm); }
+
+/* ==========================================================================
+   Tables — points table & leaderboards
+   ========================================================================== */
+.table-wrap { overflow-x: auto; border-radius: var(--radius-lg); border: 1px solid var(--msl-line); background: var(--msl-white); -webkit-overflow-scrolling: touch; }
+table.data-table { width: 100%; border-collapse: collapse; min-width: 640px; font-family: var(--font-body); }
+table.data-table thead th {
+  background: var(--msl-purple-950); color: rgba(255,255,255,0.85);
+  font-size: var(--fs-xs); letter-spacing: 0.08em; text-transform: uppercase;
+  text-align: left; padding: 16px 18px; white-space: nowrap; font-weight: 700;
+}
+table.data-table thead th.num, table.data-table td.num { text-align: center; }
+table.data-table tbody td { padding: 16px 18px; border-top: 1px solid var(--msl-line); font-size: var(--fs-sm); white-space: nowrap; color: var(--msl-ink); }
+table.data-table tbody tr:nth-child(even) { background: var(--msl-cream); }
+table.data-table tbody tr:hover { background: var(--msl-lime-050); }
+table.data-table td.team-cell { display: flex; align-items: center; gap: 10px; font-weight: 700; white-space: nowrap; }
+table.data-table td.team-cell .mini-crest { width: 26px; height: 26px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
+table.data-table td.rank { font-family: var(--font-display); font-weight: 800; color: var(--msl-violet-500); font-size: 1.05rem; }
+table.data-table td.pts { font-weight: 800; color: var(--msl-violet-500); }
+table.data-table .nrr-pos { color: var(--msl-green); font-weight: 700; }
+table.data-table .nrr-neg { color: var(--msl-red); font-weight: 700; }
+table.data-table .player-name { display: flex; flex-direction: column; }
+table.data-table .player-name a { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: var(--msl-ink); }
+table.data-table .player-name a:hover { color: var(--msl-violet-500); }
+table.data-table .player-name a svg { width: 13px; height: 13px; opacity: 0.5; }
+table.data-table .player-team { font-size: var(--fs-xs); color: var(--msl-ink-soft); text-transform: none; margin-top: 2px; }
+
+.form-pills { display: flex; gap: 4px; }
+.form-pill { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 800; color: #fff; }
+.form-pill.W { background: var(--msl-green); }
+.form-pill.L { background: var(--msl-red); }
+.form-pill.D, .form-pill.T, .form-pill.N { background: #A0A0A0; }
+
+/* Season/year selector */
+.season-switch { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 28px; }
+.select-wrap { position: relative; display: inline-flex; align-items: center; }
+.select-wrap svg { position: absolute; right: 14px; width: 16px; height: 16px; pointer-events: none; color: var(--msl-ink-soft); }
+select.season-select {
+  appearance: none; -webkit-appearance: none;
+  background: var(--msl-white); border: 2px solid var(--msl-line); border-radius: var(--radius);
+  padding: 12px 40px 12px 16px; font-weight: 700; font-size: var(--fs-sm);
+  letter-spacing: 0.03em; text-transform: uppercase; color: var(--msl-ink);
+  min-width: 220px; min-height: 48px;
+  cursor: pointer; transition: border-color 0.25s var(--ease);
+}
+select.season-select:hover { border-color: var(--msl-violet-500); }
+
+.leaderboard-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+.leaderboard-tabs button {
+  padding: 12px 22px; border-radius: 999px; border: 2px solid var(--msl-line);
+  background: var(--msl-white); font-weight: 700; font-size: var(--fs-sm);
+  letter-spacing: 0.03em; text-transform: uppercase; color: var(--msl-ink-soft);
+  transition: all 0.25s var(--ease); min-height: 44px;
+}
+.leaderboard-tabs button[aria-selected="true"] { background: var(--msl-violet-500); border-color: var(--msl-violet-500); color: #fff; }
+.leaderboard-tabs button:hover:not([aria-selected="true"]) { border-color: var(--msl-violet-500); color: var(--msl-violet-500); }
+
+.leaderboard-foot { display: flex; justify-content: flex-end; margin-top: 16px; }
+
+/* ==========================================================================
+   Competition highlights / feature list
+   ========================================================================== */
+.feature-list { display: grid; gap: 14px; }
+.feature-list li { display: flex; align-items: flex-start; gap: 14px; padding: 16px 20px; background: var(--msl-white); border: 1px solid var(--msl-line); border-radius: var(--radius); font-size: var(--fs-sm); color: var(--msl-ink); font-weight: 600; }
+.bg-dark .feature-list li, .bg-violet .feature-list li { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.14); color: rgba(255,255,255,0.85); }
+.feature-list svg { width: 20px; height: 20px; color: var(--msl-violet-500); flex-shrink: 0; margin-top: 1px; }
+.bg-dark .feature-list svg, .bg-violet .feature-list svg { color: var(--msl-lime-400); }
+
+/* Split section (image + copy) */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.split.reverse { direction: rtl; }
+.split.reverse > * { direction: ltr; }
+.split-media { border-radius: var(--radius-lg); overflow: hidden; aspect-ratio: 4/5; position: relative; }
+.split-media img { width: 100%; height: 100%; object-fit: cover; position: relative; z-index: 1; }
+@media (max-width: 900px) { .split { grid-template-columns: 1fr; gap: 32px; } .split-media { aspect-ratio: 16/10; } }
+
+/* Portrait medallion: for studio headshots with a plain backdrop, crop to
+   a circle inside a decorative colour halo instead of showing the photo's
+   flat grey background as a rectangle. No background-removal tooling
+   available, so this sidesteps the problem entirely rather than faking a
+   cutout. */
+.portrait-medallion { display: flex; align-items: center; justify-content: center; padding: 24px; }
+.portrait-medallion-inner {
+  position: relative;
+  width: clamp(220px, 34vw, 360px);
+  aspect-ratio: 1;
+}
+.portrait-medallion-inner::before {
+  content: "";
+  position: absolute; inset: -12px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, var(--msl-violet-400) 0%, var(--msl-violet-500) 55%, var(--msl-purple-950) 100%);
+  box-shadow: var(--shadow-pop);
+  z-index: 0;
+}
+.portrait-medallion-inner img {
+  position: relative; z-index: 1;
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 18%;
+  border: 6px solid var(--msl-cream);
+}
+.portrait-medallion-inner::after {
+  content: "";
+  position: absolute; right: -4px; bottom: 4%;
+  width: 15%; height: 15%; min-width: 32px; min-height: 32px;
+  border-radius: 50%;
+  background: var(--msl-lime-400);
+  border: 4px solid var(--msl-cream);
+  z-index: 2;
+}
+
+/* ==========================================================================
+   CTA band
+   ========================================================================== */
+.cta-band { position: relative; overflow: hidden; text-align: center; }
+.cta-band::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(900px 500px at 50% -20%, rgba(216,248,76,0.18), transparent 60%);
+}
+.cta-band .container { position: relative; z-index: 1; }
+.cta-band h2 { max-width: 20ch; margin: 0 auto; }
+.cta-band p { max-width: 56ch; margin: 18px auto 0; font-size: var(--fs-lg); }
+.cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 36px; }
+
+/* ==========================================================================
+   Partners strip
+   ========================================================================== */
+.partners-strip { display: flex; flex-wrap: wrap; gap: 40px; align-items: center; justify-content: center; }
+.partners-strip .partner-slot {
+  display: flex; align-items: center; justify-content: center;
+  height: 56px; padding: 0 18px; font-family: var(--font-display); font-weight: 800;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--msl-ink-soft); font-size: 1rem; opacity: 0.7;
+  border: 1px dashed var(--msl-line); border-radius: var(--radius);
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+.field { margin-bottom: 20px; }
+.field label { display: block; font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--msl-ink); margin-bottom: 8px; }
+.field input, .field textarea, .field select {
+  width: 100%; border: 2px solid var(--msl-line); border-radius: var(--radius);
+  padding: 14px 16px; font-size: var(--fs-sm); color: var(--msl-ink); background: var(--msl-white);
+  transition: border-color 0.25s var(--ease); min-height: 52px;
+}
+.field textarea { min-height: 140px; resize: vertical; }
+.field input:hover, .field textarea:hover, .field select:hover { border-color: var(--msl-violet-400); }
+.field input:focus, .field textarea:focus, .field select:focus { border-color: var(--msl-violet-500); }
+
+.contact-info-list { display: grid; gap: 20px; }
+.contact-info-item { display: flex; gap: 16px; align-items: flex-start; }
+.contact-info-item .ci-icon { width: 46px; height: 46px; border-radius: var(--radius); background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--msl-lime-400); }
+.contact-info-item .ci-icon svg { width: 20px; height: 20px; }
+.contact-info-item h4 { color: #fff; font-size: 1rem; margin-bottom: 4px; }
+.contact-info-item p a:hover { color: var(--msl-lime-400); }
+
+.social-row { display: flex; gap: 10px; margin-top: 28px; }
+.social-row a { width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; color: #fff; transition: all 0.25s var(--ease); }
+.social-row a:hover { background: var(--msl-lime-400); color: var(--msl-ink); border-color: var(--msl-lime-400); }
+.social-row svg { width: 18px; height: 18px; }
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.site-footer { background: var(--msl-purple-950); color: rgba(255,255,255,0.6); padding: 80px 0 0; }
+.footer-top { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.1fr; gap: 48px; padding-bottom: 56px; border-bottom: 1px solid var(--msl-line-dark); }
+.footer-brand .brand { margin-bottom: 18px; }
+.footer-brand p { font-size: var(--fs-sm); max-width: 34ch; }
+.footer-col h5 { color: #fff; font-size: var(--fs-sm); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 18px; }
+.footer-col ul { display: grid; gap: 12px; }
+.footer-col a { font-size: var(--fs-sm); transition: color 0.25s var(--ease); }
+.footer-col a:hover { color: var(--msl-lime-400); }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; padding: 26px 0; font-size: var(--fs-xs); flex-wrap: wrap; gap: 12px; }
+.footer-bottom a:hover { color: var(--msl-lime-400); }
+@media (max-width: 980px) { .footer-top { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .footer-top { grid-template-columns: 1fr; gap: 36px; } }
+
+/* ==========================================================================
+   Misc: empty states, pagination, back-to-top
+   ========================================================================== */
+.empty-state { text-align: center; padding: 80px 24px; color: var(--msl-ink-soft); }
+.empty-state svg { width: 48px; height: 48px; margin: 0 auto 20px; color: var(--msl-line); }
+.empty-state h3 { margin-bottom: 10px; }
+
+/* Custom cursor — dot tracks the pointer 1:1; the ring trails it via its
+   own transform transition (the easing IS the trail). Injected by main.js
+   on fine-pointer devices only; both ignore pointer events entirely. */
+.cursor-dot, .cursor-ring {
+  position: fixed; top: 0; left: 0; z-index: 9999;
+  pointer-events: none; border-radius: 50%;
+  opacity: 0; visibility: hidden;
+}
+.cursor-dot.is-active, .cursor-ring.is-active { opacity: 1; visibility: visible; }
+.cursor-dot {
+  width: 8px; height: 8px; margin: -4px 0 0 -4px;
+  background: var(--msl-lime-400);
+  transition: width 0.25s var(--ease), height 0.25s var(--ease), margin 0.25s var(--ease), opacity 0.3s ease;
+}
+.cursor-dot.cursor-hover { width: 20px; height: 20px; margin: -10px 0 0 -10px; opacity: 0.75; }
+.cursor-ring {
+  width: 34px; height: 34px; margin: -17px 0 0 -17px;
+  border: 1.5px solid var(--msl-violet-400);
+  transition: transform 0.35s ease-out, width 0.3s var(--ease), height 0.3s var(--ease), margin 0.3s var(--ease), opacity 0.3s ease;
+}
+.cursor-ring.cursor-hover { width: 52px; height: 52px; margin: -26px 0 0 -26px; opacity: 0.35; }
+
+.back-to-top {
+  position: fixed; right: 24px; bottom: 24px; z-index: 150;
+  width: 48px; height: 48px; border-radius: 50%; background: var(--msl-violet-500); color: #fff;
+  display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-pop);
+  opacity: 0; visibility: hidden; transform: translateY(10px);
+  transition: all 0.3s var(--ease);
+}
+.back-to-top.is-visible { opacity: 1; visibility: visible; transform: translateY(0); }
+.back-to-top svg { width: 20px; height: 20px; }
+
+/* Reveal-on-scroll */
+.reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s var(--ease), transform 0.8s var(--ease); }
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+/* Opacity-only variant for elements whose transform is already in use
+   (positioning translates, the tilt effect) — a translateY reveal would
+   clobber those. */
+.reveal-fade { opacity: 0; transition: opacity 0.9s var(--ease); }
+.reveal-fade.is-visible { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  html { scroll-behavior: auto; }
+}
+
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+.text-center { text-align: center; }
+.mt-0 { margin-top: 0; }
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-12 { gap: 12px; }
+.hide-mobile { display: initial; }
+.show-mobile { display: none; }
+@media (max-width: 700px) { .hide-mobile { display: none; } .show-mobile { display: initial; } }
+
+/* ==========================================================================
+   Responsive base
+   ========================================================================== */
+@media (max-width: 700px) {
+  .split, .grid-2 { gap: 24px; }
+  table.data-table thead th, table.data-table tbody td { padding: 12px 14px; }
+}

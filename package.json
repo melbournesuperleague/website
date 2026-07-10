@@ -1,0 +1,10 @@
+{
+  "name": "msl-website",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Melbourne Super League — static website (no framework/build tooling required).",
+  "scripts": {
+    "build": "node scripts/generate-manifests.mjs",
+    "start": "python3 -m http.server 8080"
+  }
+}

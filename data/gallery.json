@@ -1,0 +1,12 @@
+{
+  "_comment": "One album per shoot/event. 'folder' auto-loads every image dropped into that assets/img/gallery/<slug>/ directory — see docs/CONTENT-GUIDE.md. Add a new album by adding a new object here + creating the matching folder.",
+  "albums": [
+    {
+      "slug": "community-day",
+      "title": "MSL Community Day",
+      "date": "2025-10-18",
+      "folder": "assets/img/gallery/community-day",
+      "cover": "assets/img/gallery/community-day/01.jpg"
+    }
+  ]
+}

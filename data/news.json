@@ -1,0 +1,47 @@
+{
+  "_comment": "SAMPLE launch content — these 3 articles were written from facts already confirmed in your MSL content doc (season timeline, auction, community focus) so the News page ships looking real, not empty. Replace freely with your own articles any time. Each 'imageFolder' auto-loads every photo dropped into that assets/img/news/<slug>/ folder — see docs/CONTENT-GUIDE.md.",
+  "articles": [
+    {
+      "slug": "season-underway",
+      "title": "MSL Premiers 2025–26 Returns Bigger Than Ever",
+      "date": "2025-12-01",
+      "category": "Competition",
+      "excerpt": "Building on a successful inaugural season, MSL Premiers is back with expanded participation, enhanced broadcasting, international players and greater national recognition.",
+      "imageFolder": "assets/img/news/season-underway",
+      "body": [
+        "Melbourne Super League's flagship competition, MSL Premiers, has returned for its second season — and it's bigger than ever.",
+        "Following a successful inaugural season in December 2024, MSL Premiers has expanded participation, enhanced its broadcast production and welcomed international players into the competition, alongside an increased prize pool and growing national recognition.",
+        "The tournament continues to bring together talented domestic and international cricketers from diverse communities across Australia, competing in a franchise-based T20 format across premium turf venues.",
+        "As the season progresses, follow live scores, the points table and player leaderboards right here on the MSL website, or head to CricHeroes for ball-by-ball coverage."
+      ]
+    },
+    {
+      "slug": "player-auction",
+      "title": "Inside the MSL Premiers Live Player Auction",
+      "date": "2025-11-10",
+      "category": "Competition",
+      "excerpt": "Franchise squads for MSL Premiers are built through a Live Player Auction — one of the competition's signature events and a genuine pathway moment for emerging talent.",
+      "imageFolder": "assets/img/news/player-auction",
+      "body": [
+        "One of the most anticipated events on the MSL Premiers calendar is the Live Player Auction, where the league's six franchises build their squads for the season ahead.",
+        "The auction gives emerging players a professional platform to be recognised alongside experienced domestic and international athletes, with franchise ownership groups bidding to assemble competitive, balanced line-ups.",
+        "For many players, the auction is more than a squad-selection process — it's a genuine opportunity to be seen. Live-streamed coverage and strong industry connections mean a standout auction moment can open doors well beyond the tournament itself.",
+        "MSL Premiers' significant prize pool and professional tournament management continue to raise the standard of what a multicultural community competition can deliver."
+      ]
+    },
+    {
+      "slug": "community-day",
+      "title": "One Game, Many Cultures: Inside an MSL Community Day",
+      "date": "2025-10-18",
+      "category": "Community",
+      "excerpt": "Community is the heartbeat of Melbourne Super League. A look at how MSL brings players, families and volunteers together beyond the boundary.",
+      "imageFolder": "assets/img/news/community-day",
+      "body": [
+        "Beyond the competition itself, Melbourne Super League continues to invest in the community events that make MSL what it is — proudly celebrating Australia's cultural diversity by creating an inclusive environment where people from every background come together through a shared passion for cricket.",
+        "From grassroots participation days to match-day fan zones, these events strengthen local communities, support volunteers and empower local clubs, creating connections that last well beyond a single season.",
+        "Every tournament MSL delivers contributes to a stronger, more united community — and days like this are where that mission comes to life.",
+        "Want to get involved as a player, volunteer or partner? Visit our Get Involved page to find out how."
+      ]
+    }
+  ]
+}

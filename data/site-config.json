@@ -1,0 +1,51 @@
+{
+  "_comment": "Global site settings. Safe to edit any value below — see docs/CONTENT-GUIDE.md.",
+  "orgName": "Melbourne Super League",
+  "shortName": "MSL",
+  "flagshipCompetition": "MSL Premiers",
+  "tagline": "Where Communities Unite. Talent Thrives. Legacies Begin.",
+  "foundedYear": 2021,
+  "defaultSeason": "2025-26",
+  "cricheroes": {
+    "tournamentName": "MSL Premiers",
+    "tournamentId": "1217667",
+    "baseUrl": "https://cricheroes.com/tournament/1217667/msl-premiers",
+    "leaderboardUrl": "https://cricheroes.com/tournament/1217667/msl-premiers/leaderboard",
+    "pointsTableUrl": "https://cricheroes.com/tournament/1217667/msl-premiers/points-table",
+    "matchesUrl": "https://cricheroes.com/tournament/1217667/msl-premiers/matches/past-matches"
+  },
+  "contact": {
+    "email": "melbournesuperleague@gmail.com",
+    "phone": "+61 435 322 155",
+    "phoneDisplay": "+61 435 322 155",
+    "city": "Melbourne, Victoria, Australia",
+    "facebook": "https://www.facebook.com/p/Melbourne-Super-League-100089156906232/",
+    "instagram": "https://www.instagram.com/melbournesuperleague/",
+    "note": "Phone/email/social sourced from MSL's public Facebook + PlayHQ listings. Confirm these are current and update here if not — see docs/CONTENT-GUIDE.md."
+  },
+  "_navComment": "This nav array is a reference copy for editors. The actual header/footer markup is duplicated as static HTML at the top/bottom of every page (standard for fast static sites) — to rename/add/remove a nav item, use find-and-replace for the <nav class=\"nav-primary\"> block across all HTML files. See docs/CONTENT-GUIDE.md.",
+  "nav": [
+    { "label": "Home", "href": "index.html" },
+    { "label": "About", "href": "about.html" },
+    { "label": "MSL Premiers", "href": "competition.html" },
+    { "label": "Teams", "href": "teams.html" },
+    { "label": "Standings", "href": "standings.html" },
+    { "label": "News", "href": "news.html" },
+    { "label": "Gallery", "href": "gallery.html" },
+    { "label": "Contact", "href": "contact.html" }
+  ],
+  "footerLinks": {
+    "competition": [
+      { "label": "MSL Premiers", "href": "competition.html" },
+      { "label": "Teams", "href": "teams.html" },
+      { "label": "Standings & Leaderboards", "href": "standings.html" },
+      { "label": "Fixtures & Results", "href": "https://cricheroes.com/tournament/1217667/msl-premiers/matches/past-matches" }
+    ],
+    "league": [
+      { "label": "About MSL", "href": "about.html" },
+      { "label": "News", "href": "news.html" },
+      { "label": "Gallery", "href": "gallery.html" },
+      { "label": "Get Involved", "href": "get-involved.html" }
+    ]
+  }
+}
