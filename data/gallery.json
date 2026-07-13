@@ -6,21 +6,21 @@
       "title": "Matchday Actions",
       "date": "2025-12-15",
       "folder": "assets/img/gallery/matchday-actions",
-      "cover": "assets/img/gallery/matchday-actions/001.jpg"
+      "cover": "assets/img/gallery/matchday-actions/001.webp"
     },
     {
       "slug": "players",
       "title": "Players",
       "date": "2025-12-15",
       "folder": "assets/img/gallery/players",
-      "cover": "assets/img/gallery/players/001.jpg"
+      "cover": "assets/img/gallery/players/001.webp"
     },
     {
       "slug": "community-day",
       "title": "MSL Community Day",
       "date": "2025-10-18",
       "folder": "assets/img/gallery/community-day",
-      "cover": "assets/img/gallery/community-day/01.jpg"
+      "cover": "assets/img/gallery/community-day/01.webp"
     }
   ]
 }
