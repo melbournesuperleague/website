@@ -11,6 +11,7 @@
   "assets/img/gallery/community-day": [
     "assets/img/gallery/community-day/01.jpg"
   ],
+  "assets/img/gallery/match-day": [],
   "__teamLogos": {
     "auscon-melbourne-united": "assets/img/teams/auscon-melbourne-united.png",
     "aussie-kings": "assets/img/teams/aussie-kings.png",
@@ -25,5 +26,5 @@
     "sydney-title-club": "assets/img/teams/sydney-title-club.png",
     "westside-falcons": "assets/img/teams/westside-falcons.png"
   },
-  "__generatedAt": "2026-07-13T04:41:23.212Z"
+  "__generatedAt": "2026-07-13T07:16:42.663Z"
 }
