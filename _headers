@@ -1,16 +1,26 @@
-# Cloudflare Pages custom headers — cache images/fonts aggressively,
-# keep HTML/JSON fresh so content edits show up immediately.
-/assets/img/*
-  Cache-Control: public, max-age=31536000, immutable
+# Cloudflare Pages custom headers.
+#
+# This is a no-build static site: the CSS/JS filenames never change between
+# deploys (always style.css, main.js, …). So they must NOT be cached with a
+# long max-age — a returning visitor would keep serving a stale copy after you
+# redeploy (missing styles/animations until their cache expired). Instead we let
+# the browser revalidate them every load; Cloudflare sends a strong ETag, so an
+# unchanged file returns a tiny 304 (no re-download) and a changed file is
+# fetched fresh immediately after deploy.
 
 /assets/css/*
-  Cache-Control: public, max-age=86400
+  Cache-Control: public, max-age=0, must-revalidate
 
 /assets/js/*
-  Cache-Control: public, max-age=86400
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Images are large and worth caching, but we drop "immutable" (which blocks even
+# a manual refresh) and keep a moderate TTL so re-uploaded photos still update.
+/assets/img/*
+  Cache-Control: public, max-age=86400, must-revalidate
 
 /data/*
-  Cache-Control: public, max-age=300
+  Cache-Control: public, max-age=300, must-revalidate
 
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
