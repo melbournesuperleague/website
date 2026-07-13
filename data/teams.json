@@ -1,7 +1,6 @@
 {
   "_comment": "One entry per franchise. 'logo' points to assets/img/teams/<slug>.png — drop a file there with that exact name, run `npm run build`, and it replaces the auto-generated initials crest automatically. See docs/CONTENT-GUIDE.md.",
-  "_note": "This roster spans every season, so it is NOT the list of teams in any one year. melbourne-thunders played 2024 but not 2025; the seven teams below melbourne-cobras played 2025 but not 2024. A team with no row in the selected year's points table simply shows no rank.",
-  "_todo": "melbourne-thunders has no logo file yet — it renders a generated initials badge until assets/img/teams/melbourne-thunders.png exists.",
+  "_note": "This roster spans every season, so it is NOT the list of teams in any one year. The seven teams below melbourne-cobras played 2025 but not 2024. A team with no row in the selected year's points table simply shows no rank.",
   "teams": [
     {
       "slug": "melbourne-bulls",
@@ -18,15 +17,6 @@
       "accent": "#1B0F4A",
       "logo": "assets/img/teams/melbourne-pirates.png",
       "blurb": "A balanced squad built around disciplined bowling and sharp fielding."
-    },
-    {
-      "slug": "melbourne-thunders",
-      "name": "Melbourne Thunders",
-      "sourceName": "Melbourne Thunders",
-      "accent": "#D8F84C",
-      "accentText": "#14102B",
-      "logo": "assets/img/teams/melbourne-thunders.png",
-      "blurb": "League leaders across the regular season, driven by all-round depth."
     },
     {
       "slug": "auscon-melbourne-united",

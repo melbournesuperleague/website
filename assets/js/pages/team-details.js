@@ -22,7 +22,6 @@ async function init() {
   // The roster spans seasons, so a team may have no row in the current season's table.
   const group = standingsGroups(table).find((g) => g.standings.some((s) => s.team === slug));
   const standing = group?.standings.find((s) => s.team === slug);
-  const groupLabel = group && standingsGroups(table).length > 1 ? ` in ${group.name}` : "";
 
   const highlights = [];
   ["batting", "bowling", "mvp"].forEach((cat) => {
@@ -39,7 +38,6 @@ async function init() {
           ${teamCrestHTML(team, manifest, "crest-inline")}
           <div>
             <h1 style="margin-bottom:6px">${team.name}</h1>
-            ${standing ? `<p style="color:var(--msl-lime-400);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:.85rem">${season.label} · Rank #${standing.rank}${groupLabel} · ${standing.points} Points</p>` : ""}
           </div>
         </div>
       </div>

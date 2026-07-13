@@ -36,7 +36,7 @@
       <a href="contact.html">Contact Us</a>
     </nav>
     <div class="header-actions">
-      <a href="get-involved.html" class="btn btn-primary btn-sm">Get Involved</a>
+      <a href="https://zfrmz.com.au/OcGn4peMJz1LqlJkWSQw" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Get Involved</a>
       <button class="nav-toggle" data-nav-toggle aria-label="Open menu" aria-expanded="false"></button>
     </div>
   </div>
@@ -73,7 +73,7 @@
       <li><span class="mobile-nav-contact-icon" data-icon-mail></span><a data-contact-email href="mailto:">—</a></li>
       <li><span class="mobile-nav-contact-icon" data-icon-phone></span><a data-contact-phone href="tel:">—</a></li>
     </ul>
-    <a href="get-involved.html" class="btn btn-lime btn-block">Get Involved</a>
+    <a href="https://zfrmz.com.au/OcGn4peMJz1LqlJkWSQw" target="_blank" rel="noopener" class="btn btn-lime btn-block">Get Involved</a>
     <div class="social-row">
       <a href="#" data-contact-facebook aria-label="Facebook" target="_blank" rel="noopener"></a>
       <a href="#" data-contact-instagram aria-label="Instagram" target="_blank" rel="noopener"></a>
@@ -221,8 +221,8 @@
     document.querySelector("[data-nav-close]").innerHTML = MSLIcons.icon("close");
     document.querySelector("[data-back-to-top]").innerHTML = MSLIcons.icon("arrowUp");
     document.querySelector("[data-crumb-icon]").innerHTML = MSLIcons.icon("chevronRight");
-    document.querySelector("[data-contact-facebook]").innerHTML = MSLIcons.icon("facebook");
-    document.querySelector("[data-contact-instagram]").innerHTML = MSLIcons.icon("instagram");
+    document.querySelectorAll("[data-contact-facebook]").forEach(el => el.innerHTML = MSLIcons.icon("facebook"));
+    document.querySelectorAll("[data-contact-instagram]").forEach(el => el.innerHTML = MSLIcons.icon("instagram"));
 
     const lists = {
       highlights: ["Franchise-based T20 competition","Elite domestic and international players","Professional tournament management","Premium turf venues","Multi-camera live broadcast production","Expert commentary","Match highlights and digital content","Live Player Auction","Significant prize pool","Community engagement initiatives"],

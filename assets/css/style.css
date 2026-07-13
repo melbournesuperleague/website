@@ -131,8 +131,23 @@ section { position: relative; }
 .section-pad { padding-top: var(--section-pad); padding-bottom: var(--section-pad); }
 .section-pad-sm { padding-top: clamp(40px, 5vw, 72px); padding-bottom: clamp(40px, 5vw, 72px); }
 
-.bg-cream { background: var(--msl-cream); }
-.bg-white { background: var(--msl-white); }
+/* Light sections carry a very faint violet + lime (neon) wash in opposite
+   corners instead of dead-flat colour — subtle enough to read as depth, not
+   a gradient banner. Alternating anchors (cream vs white) give the stacked
+   sections a gentle rhythm. The hero and already-coloured violet/dark
+   sections are intentionally left out. */
+.bg-cream {
+  background-color: var(--msl-cream);
+  background-image:
+    radial-gradient(72rem 40rem at 92% -18%, rgba(124, 82, 234, 0.13), transparent 62%),
+    radial-gradient(60rem 34rem at -8% 116%, rgba(216, 248, 76, 0.11), transparent 62%);
+}
+.bg-white {
+  background-color: var(--msl-white);
+  background-image:
+    radial-gradient(70rem 38rem at 8% -18%, rgba(124, 82, 234, 0.11), transparent 62%),
+    radial-gradient(58rem 32rem at 108% 118%, rgba(216, 248, 76, 0.09), transparent 62%);
+}
 .bg-dark {
   background: var(--msl-purple-950);
   color: rgba(255,255,255,0.78);
@@ -587,7 +602,7 @@ body.nav-open { overflow: hidden; }
 .hero-visual {
   position: relative; z-index: 2;
   width: 100%;
-  height: clamp(340px, 92vw, 480px);
+  height: clamp(420px, 118vw, 560px);
   margin-top: 40px;
   perspective: 1000px;
 }
@@ -607,12 +622,16 @@ body.nav-open { overflow: hidden; }
 .hero-visual-photo {
   position: absolute; z-index: 1;
   left: 0; right: 0; margin-inline: auto; bottom: 0;
-  width: min(88vw, 480px);
+  width: auto;
   transition: transform 0.2s ease;
   will-change: transform;
 }
+/* The cutout is a tall portrait, so it's sized by HEIGHT (not width) and
+   bottom-anchored — the whole player stays visible and "stands on" the
+   section's bottom edge instead of overflowing off the top. */
 .hero-visual-photo img {
-  width: 100%; height: auto;
+  display: block; margin-inline: auto;
+  height: clamp(380px, 108vw, 520px); width: auto;
   filter: drop-shadow(0 24px 48px rgba(10, 6, 32, 0.55));
 }
 @media (min-width: 992px) {
@@ -631,16 +650,33 @@ body.nav-open { overflow: hidden; }
      the player is the dominant element, the shard is the accent. It's
      offset toward the right so it peeks out past the player's shoulder. */
   .hero-visual-shard {
-    left: auto; right: 2%; top: 8%; bottom: auto;
-    width: min(24vw, 430px); height: 64%;
-    transform: skewX(-14deg);
+    left: 50%; right: auto; top: 15%; bottom: auto;
+    width: min(34vw, 600px); height: 46%;
+    transform: translateX(-32%) skewX(-14deg);
   }
   /* Centred inside the (wider) visual box via auto margins so the player
      sits ~70% across the viewport (Nitro's centre-right placement) with the
      shard peeking out to his right — and the tilt transform stays free. */
   .hero-visual-photo {
     left: 0; right: 0; margin-inline: auto; bottom: 0;
-    width: min(48vw, 860px);
+    width: auto;
+  }
+  /* Tall portrait scaled to the hero's height so the full player fits a
+     100vh section without his head clipping off the top. */
+  .hero-visual-photo img { height: min(88vh, 880px); }
+}
+/* Cramped desktop band (992–1199): not enough room for a centred player
+   plus the full text column, so the portrait hugs the right gutter, the
+   lede wraps narrower, and the shard tucks behind him on the right —
+   keeping the copy clear of the player. Placed AFTER the min-width:992
+   block so it wins on source order. */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .hero-visual-photo img { margin-left: auto; margin-right: 0; }
+  .hero-content .lede { max-width: 32ch; }
+  .hero-visual-shard {
+    left: auto; right: 2%;
+    width: min(36vw, 480px); height: 44%;
+    transform: skewX(-14deg);
   }
 }
 
@@ -933,6 +969,120 @@ select.season-select:hover { border-color: var(--msl-violet-500); }
 .split-media { border-radius: var(--radius-lg); overflow: hidden; aspect-ratio: 4/5; position: relative; }
 .split-media img { width: 100%; height: 100%; object-fit: cover; position: relative; z-index: 1; }
 @media (max-width: 900px) { .split { grid-template-columns: 1fr; gap: 32px; } .split-media { aspect-ratio: 16/10; } }
+
+/* ==========================================================================
+   About / Vision composition (home "More Than Cricket" block)
+   Layered editorial media (primary action portrait + overlapping inset,
+   angular brand shard, lime ring, floating chip) beside a stat strip whose
+   figures count up on scroll — replaces the flat single-image split so the
+   section reads intentional rather than templated.
+   ========================================================================== */
+.vision-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: clamp(40px, 6vw, 96px);
+  align-items: center;
+}
+.vision-copy .link-arrow { margin-top: 4px; }
+
+/* --- Stat strip --- */
+.vision-stats {
+  display: flex;
+  margin: 34px 0 30px;
+  border-block: 1px solid var(--msl-line);
+}
+.vision-stat { flex: 1 1 0; min-width: 0; padding: 22px 20px; }
+.vision-stat:first-child { padding-left: 0; }
+.vision-stat + .vision-stat { border-left: 1px solid var(--msl-line); }
+.vision-stat-num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(2.1rem, 1.6rem + 1.7vw, 3.1rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  color: var(--msl-violet-500);
+  font-variant-numeric: tabular-nums;
+}
+.vision-stat-label {
+  margin: 10px 0 0;
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  font-weight: 700;
+  color: var(--msl-ink-soft);
+}
+
+/* --- Layered media --- */
+.vision-media { position: relative; isolation: isolate; padding: 6% 6% 8% 0; }
+.vision-photo { border-radius: var(--radius-lg); overflow: hidden; position: relative; }
+.vision-photo img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 0.7s var(--ease);
+}
+.vision-photo-main {
+  aspect-ratio: 4/5;
+  width: 82%;
+  margin-left: auto;
+  box-shadow: var(--shadow-pop);
+  z-index: 1;
+}
+.vision-photo-inset {
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 46%;
+  aspect-ratio: 4/3;
+  z-index: 2;
+  border: 6px solid var(--msl-cream);
+  box-shadow: var(--shadow-pop);
+  transform: rotate(-3deg);
+  transition: transform 0.6s var(--ease);
+}
+.vision-media:hover .vision-photo-main img { transform: scale(1.045); }
+.vision-media:hover .vision-photo-inset { transform: rotate(-1.5deg) translateY(-4px); }
+
+/* Angular brand shard peeking behind the top-right corner (echoes the hero) */
+.vision-shard {
+  position: absolute;
+  z-index: 0;
+  top: 0; right: 0;
+  width: 56%; height: 58%;
+  background: linear-gradient(150deg, var(--msl-lime-400) 0%, var(--msl-violet-500) 68%, var(--msl-purple-700) 100%);
+  clip-path: polygon(22% 0, 100% 0, 100% 66%, 62% 100%, 0 40%);
+  transform: skewX(-7deg);
+}
+/* Floating lime chip */
+.vision-badge {
+  position: absolute;
+  z-index: 3;
+  top: 9%; right: 0;
+  background: var(--msl-lime-400);
+  color: var(--msl-ink);
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: 0.98rem;
+  padding: 11px 17px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-pop);
+  animation: vision-float 4.5s var(--ease) infinite;
+}
+@keyframes vision-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-9px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vision-badge { animation: none; }
+  .vision-photo img, .vision-photo-inset { transition: none; }
+}
+@media (max-width: 900px) {
+  .vision-grid { grid-template-columns: 1fr; gap: 44px; }
+  .vision-media { padding: 4% 6% 6% 0; max-width: 520px; }
+}
+@media (max-width: 460px) {
+  .vision-stat { padding: 18px 12px; }
+  .vision-badge { font-size: 0.82rem; padding: 9px 13px; }
+}
 
 /* Portrait medallion: for studio headshots with a plain backdrop, crop to
    a circle inside a decorative colour halo instead of showing the photo's
