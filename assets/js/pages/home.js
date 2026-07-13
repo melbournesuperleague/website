@@ -74,13 +74,26 @@ async function init() {
     window.MSLReveal?.observe(newsPreview);
   }
 
-  // Gallery preview
+  // Gallery preview — one cover card per album/folder (Matchday Actions,
+  // Players, Community Day…), not loose thumbnails from a single folder.
   const galleryPreview = document.querySelector("[data-gallery-preview]");
   if (galleryPreview && gallery.length) {
-    const images = (manifest[gallery[0].folder] || []).slice(0, 4);
-    galleryPreview.innerHTML = images
-      .map((src) => `<a href="gallery.html?album=${gallery[0].slug}"><img src="${src}" alt="" loading="lazy"></a>`)
+    galleryPreview.innerHTML = gallery
+      .map((a, i) => {
+        const images = manifest[a.folder] || [];
+        const cover = a.cover && images.includes(a.cover) ? a.cover : images[0];
+        const count = `${images.length} photo${images.length === 1 ? "" : "s"}`;
+        return `
+        <a class="album-card reveal" data-reveal-delay="${(i * 0.08).toFixed(2)}" href="gallery.html?album=${a.slug}">
+          <div class="album-cover">${cover ? `<img src="${cover}" alt="${a.title}" loading="lazy">` : `<div class="empty-state" style="padding:0;height:100%;display:flex;align-items:center;justify-content:center">${window.MSLIcons.icon("image")}</div>`}</div>
+          <div class="album-info">
+            <h3>${a.title}</h3>
+            <div class="news-meta"><span>${count}</span></div>
+          </div>
+        </a>`;
+      })
       .join("");
+    window.MSLReveal?.observe(galleryPreview);
   }
 
   // Team strip — always shows every team in data/teams.json, so the count
@@ -88,7 +101,7 @@ async function init() {
   const teamStrip = document.querySelector("[data-team-strip]");
   if (teamStrip) {
     teamStrip.innerHTML = teams
-      .map((t, i) => `<a class="card team-card reveal" data-reveal-delay="${(i * 0.07).toFixed(2)}" href="team-details.html?team=${t.slug}">${teamCrestHTML(t, manifest)}<h3 style="margin-top:14px;font-size:1.1rem">${t.name}</h3></a>`)
+      .map((t, i) => `<a class="cyt-card reveal" data-reveal-delay="${(i * 0.04).toFixed(2)}" href="team-details.html?team=${t.slug}" aria-label="${t.name}" title="${t.name}">${teamCrestHTML(t, manifest)}</a>`)
       .join("");
     window.MSLReveal?.observe(teamStrip);
   }

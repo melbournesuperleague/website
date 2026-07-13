@@ -36,7 +36,7 @@
       <a href="contact.html">Contact Us</a>
     </nav>
     <div class="header-actions">
-      <a href="get-involved.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Contact Us</a>
+      <a href="contact.html" class="btn btn-primary btn-sm">Contact Us</a>
       <button class="nav-toggle" data-nav-toggle aria-label="Open menu" aria-expanded="false"></button>
     </div>
   </div>
@@ -120,11 +120,11 @@
             </div>
             <div class="vision-stat">
               <dt class="vision-stat-num" data-counter="12">0</dt>
-              <dd class="vision-stat-label">Member Teams</dd>
+              <dd class="vision-stat-label">Teams</dd>
             </div>
             <div class="vision-stat">
-              <dt class="vision-stat-num" data-counter="6">0</dt>
-              <dd class="vision-stat-label">Franchise Clubs</dd>
+              <dt class="vision-stat-num" data-counter="1000+">1000+</dt>
+              <dd class="vision-stat-label">Members</dd>
             </div>
           </dl>
           <a class="link-arrow" href="about.html">Our Full Story</a>
@@ -132,12 +132,23 @@
         <div class="vision-media reveal" data-reveal-delay="0.15">
           <span class="vision-shard" aria-hidden="true"></span>
           <figure class="vision-photo vision-photo-main">
-            <img src="assets/img/about/vision-primary.jpg" alt="An MSL Premiers bowler charging in to bowl during a match" width="1080" height="1350" loading="lazy">
+            <img src="assets/img/about/vision-primary.jpg" alt="An MSL Premiers batter in action during a match" width="1400" height="2000" loading="lazy">
+          </figure>
+          <figure class="vision-photo vision-tile vision-tile--tl">
+            <img src="assets/img/about/vision-tile-1.jpg" alt="An MSL Premiers batter driving down the ground" width="620" height="620" loading="lazy">
+          </figure>
+          <figure class="vision-photo vision-tile vision-tile--ml">
+            <img src="assets/img/about/vision-tile-2.jpg" alt="An MSL Premiers batter lining up a shot" width="560" height="746" loading="lazy">
           </figure>
           <figure class="vision-photo vision-photo-inset">
-            <img src="assets/img/about/vision-inset.jpg" alt="An MSL Premiers batter attacking a delivery" width="760" height="570" loading="lazy">
+            <img src="assets/img/about/vision-inset.jpg" alt="An MSL Premiers batter attacking a delivery" width="1400" height="2000" loading="lazy">
+          </figure>
+          <figure class="vision-photo vision-tile vision-tile--br">
+            <img src="assets/img/about/vision-tile-3.jpg" alt="An MSL Premiers batter cutting square of the wicket" width="680" height="510" loading="lazy">
           </figure>
           <span class="vision-badge">Community&nbsp;Driven</span>
+          <span class="vision-badge vision-badge--violet">Multicultural</span>
+          <span class="vision-badge vision-badge--elite">Elite&nbsp;Pathways</span>
         </div>
       </div>
     </div>
@@ -205,13 +216,22 @@
     </div>
   </section>
 
-  <section class="section-pad bg-cream">
+  <section class="section-pad bg-dark choose-team">
     <div class="container">
-      <div class="section-head reveal">
-        <div class="eyebrow">The Franchises</div>
-        <h2>Our Teams</h2>
+      <div class="cyt-grid">
+        <div class="cyt-left reveal">
+          <div class="eyebrow">The Franchises</div>
+          <h2>Choose Your Team</h2>
+          <p class="cyt-sub">Tap a club below to explore its squad, season form and story.</p>
+          <div class="cyt-cards" data-team-strip></div>
+        </div>
+        <div class="cyt-visual reveal" data-reveal-delay="0.15">
+          <div class="cyt-collage">
+            <img class="cyt-collage-main" src="assets/img/teams/choose-hero.jpg" alt="MSL Premiers club captains with the trophy in front of the Melbourne skyline" width="1600" height="1066" loading="lazy">
+            <span class="cyt-collage-cap">MSL Premiers 2025</span>
+          </div>
+        </div>
       </div>
-      <div class="grid grid-3" data-team-strip></div>
     </div>
   </section>
 
@@ -235,7 +255,7 @@
           <div class="eyebrow">Community</div>
           <h2>One Game. Many Cultures.<br>One Community.</h2>
           <p class="lede" style="margin-top:20px;color:rgba(255,255,255,0.75)">Community is the heartbeat of Melbourne Super League. We proudly celebrate Australia's cultural diversity by creating an inclusive environment where individuals from every background come together through a shared passion for cricket.</p>
-          <div class="gallery-grid" style="margin-top:32px;grid-template-columns:repeat(4,1fr)" data-gallery-preview></div>
+          <div class="album-preview" data-gallery-preview></div>
           <a class="link-arrow" style="margin-top:24px" href="gallery.html">View Gallery</a>
         </div>
         <div class="reveal" data-reveal-delay="0.15">
@@ -263,8 +283,8 @@
   <div class="container">
     <div class="footer-top">
       <div class="footer-brand">
-        <a href="index.html" class="brand"><img src="assets/img/brand/logo.png" alt=""><span class="brand-word" style="color:#fff">Melbourne Super League<small>MSL Premiers</small></span></a>
-        <p>Australia's home of multicultural cricket — uniting communities, developing talent and building legacies through the game we love.</p>
+        <a href="index.html" class="brand" aria-label="Melbourne Super League home"><img src="assets/img/brand/logo.png" alt="Melbourne Super League"></a>
+        <p class="footer-tagline">ONE GAME | MANY CULTURES | ONE COMMUNITY<br>"Where The Spirit Of Cricket Comes Alive"</p>
         <div class="social-row">
           <a href="#" data-contact-facebook aria-label="Facebook" target="_blank" rel="noopener"></a>
           <a href="#" data-contact-instagram aria-label="Instagram" target="_blank" rel="noopener"></a>
@@ -326,18 +346,18 @@
     document.querySelector("[data-lightbox-next]").innerHTML = MSLIcons.icon("chevronRight");
 
     const mslFeatures = [
-      "Franchise-based T20 competition", "Elite domestic &amp; international players",
-      "Professional tournament management", "Premium turf venues",
-      "Multi-camera live broadcast production", "Expert commentary",
-      "Live Player Auction", "Significant prize pool",
+      "Franchise-Based T20 Competition", "Elite Domestic &amp; International Players",
+      "Professional Tournament Management", "Premium Turf Venues",
+      "Multi-Camera Live Broadcast Production", "Expert Commentary",
+      "Live Player Auction", "Significant Prize Pool",
     ];
     document.querySelector("[data-features-msl]").outerHTML =
       `<ul class="feature-list grid grid-4" style="margin-top:32px">${mslFeatures.map((f, i) => `<li class="reveal" data-reveal-delay="${(i * 0.06).toFixed(2)}">${MSLIcons.icon("checkCircle")}<span>${f}</span></li>`).join("")}</ul>`;
 
     const communityFeatures = [
-      "Promoting multicultural inclusion", "Inspiring youth participation",
-      "Supporting grassroots cricket", "Strengthening community partnerships",
-      "Encouraging volunteer leadership", "Celebrating cultural diversity",
+      "Promoting Multicultural Inclusion", "Inspiring Youth Participation",
+      "Supporting Grassroots Cricket", "Strengthening Community Partnerships",
+      "Encouraging Volunteer Leadership", "Celebrating Cultural Diversity",
     ];
     document.querySelector("[data-features-community]").innerHTML =
       communityFeatures.map((f, i) => `<li class="reveal" data-reveal-delay="${(i * 0.08).toFixed(2)}">${MSLIcons.icon("checkCircle")}<span>${f}</span></li>`).join("");

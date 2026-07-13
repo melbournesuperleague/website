@@ -36,7 +36,7 @@
       <a href="contact.html">Contact Us</a>
     </nav>
     <div class="header-actions">
-      <a href="https://zfrmz.com.au/OcGn4peMJz1LqlJkWSQw" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Get Involved</a>
+      <a href="contact.html" class="btn btn-primary btn-sm">Contact Us</a>
       <button class="nav-toggle" data-nav-toggle aria-label="Open menu" aria-expanded="false"></button>
     </div>
   </div>
@@ -117,11 +117,7 @@
   <section class="section-pad bg-cream">
     <div class="container">
       <div class="split">
-        <div class="portrait-medallion reveal">
-          <div class="portrait-medallion-inner">
-            <img src="assets/img/hero/hero-player-01-circle.jpg" alt="MSL Premiers player">
-          </div>
-        </div>
+        <div class="split-media reveal"><img src="assets/img/competition/pathways.jpg" alt="An MSL Premiers bowler in action during a match"></div>
         <div class="reveal">
           <div class="eyebrow">Player Pathways</div>
           <h2>Creating Opportunities Beyond The Boundary</h2>
@@ -169,8 +165,8 @@
   <div class="container">
     <div class="footer-top">
       <div class="footer-brand">
-        <a href="index.html" class="brand"><img src="assets/img/brand/logo.png" alt=""><span class="brand-word" style="color:#fff">Melbourne Super League<small>MSL Premiers</small></span></a>
-        <p>Australia's home of multicultural cricket — uniting communities, developing talent and building legacies through the game we love.</p>
+        <a href="index.html" class="brand" aria-label="Melbourne Super League home"><img src="assets/img/brand/logo.png" alt="Melbourne Super League"></a>
+        <p class="footer-tagline">ONE GAME | MANY CULTURES | ONE COMMUNITY<br>"Where The Spirit Of Cricket Comes Alive"</p>
         <div class="social-row">
           <a href="#" data-contact-facebook aria-label="Facebook" target="_blank" rel="noopener"></a>
           <a href="#" data-contact-instagram aria-label="Instagram" target="_blank" rel="noopener"></a>
@@ -225,9 +221,9 @@
     document.querySelectorAll("[data-contact-instagram]").forEach(el => el.innerHTML = MSLIcons.icon("instagram"));
 
     const lists = {
-      highlights: ["Franchise-based T20 competition","Elite domestic and international players","Professional tournament management","Premium turf venues","Multi-camera live broadcast production","Expert commentary","Match highlights and digital content","Live Player Auction","Significant prize pool","Community engagement initiatives"],
-      pathways: ["Professional live-stream exposure","Competition against elite players","High-performance playing environment","Networking with coaches and cricket administrators","Personal leadership development","Greater visibility for representative opportunities"],
-      broadcast: ["Multi-camera production","Professional commentary","Live score graphics","Match highlights","Social media content","International digital distribution"],
+      highlights: ["Franchise-Based T20 Competition","Elite Domestic And International Players","Professional Tournament Management","Premium Turf Venues","Multi-Camera Live Broadcast Production","Expert Commentary","Match Highlights And Digital Content","Live Player Auction","Significant Prize Pool","Community Engagement Initiatives"],
+      pathways: ["Professional Live-Stream Exposure","Competition Against Elite Players","High-Performance Playing Environment","Networking With Coaches And Cricket Administrators","Personal Leadership Development","Greater Visibility For Representative Opportunities"],
+      broadcast: ["Multi-Camera Production","Professional Commentary","Live Score Graphics","Match Highlights","Social Media Content","International Digital Distribution"],
     };
     Object.entries(lists).forEach(([key, items]) => {
       document.querySelector(`[data-list="${key}"]`).innerHTML =

@@ -131,26 +131,55 @@ section { position: relative; }
 .section-pad { padding-top: var(--section-pad); padding-bottom: var(--section-pad); }
 .section-pad-sm { padding-top: clamp(40px, 5vw, 72px); padding-bottom: clamp(40px, 5vw, 72px); }
 
-/* Light sections carry a very faint violet + lime (neon) wash in opposite
-   corners instead of dead-flat colour — subtle enough to read as depth, not
-   a gradient banner. Alternating anchors (cream vs white) give the stacked
-   sections a gentle rhythm. The hero and already-coloured violet/dark
-   sections are intentionally left out. */
+/* Non-hero sections get a layered, "ghosted" decorative field in our violet
+   palette — an all-over micro dot-grid for base texture, sweeping motion
+   arcs/streaks, concentric rings and cricket balls at varied sizes bleeding
+   from the edges. Restrained opacities keep it a backdrop, not a banner.
+   Everything is painted as background layers (they never affect layout, so
+   the negative/oversize offsets that bleed motifs off the edges can't add
+   horizontal scroll). Cream and white mirror positions for gentle rhythm.
+   The hero and the already-coloured violet sections are left plain. */
+.bg-cream,
+.bg-white {
+  background-repeat:
+    no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat;
+  background-image:
+    url("../img/decor/arcs.svg"),
+    url("../img/decor/rings.svg"),
+    url("../img/decor/cricket-ball.svg"),
+    url("../img/decor/cricket-ball.svg"),
+    url("../img/decor/cricket-ball.svg"),
+    radial-gradient(circle, rgba(91, 46, 224, 0.06) 1.3px, transparent 1.6px);
+}
 .bg-cream {
   background-color: var(--msl-cream);
-  background-image:
-    radial-gradient(72rem 40rem at 92% -18%, rgba(124, 82, 234, 0.13), transparent 62%),
-    radial-gradient(60rem 34rem at -8% 116%, rgba(216, 248, 76, 0.11), transparent 62%);
+  background-position:
+    center top, right 5% top 14%, left -110px top -120px,
+    right -80px bottom -130px, right 15% bottom 9%, 0 0;
+  background-size:
+    118% auto, 300px, 380px, 250px, 150px, 26px 26px;
 }
 .bg-white {
   background-color: var(--msl-white);
-  background-image:
-    radial-gradient(70rem 38rem at 8% -18%, rgba(124, 82, 234, 0.11), transparent 62%),
-    radial-gradient(58rem 32rem at 108% 118%, rgba(216, 248, 76, 0.09), transparent 62%);
+  background-position:
+    center bottom, left 5% bottom 14%, right -110px top -120px,
+    left -80px bottom -130px, left 15% top 12%, 0 0;
+  background-size:
+    118% auto, 300px, 360px, 250px, 150px, 26px 26px;
 }
 .bg-dark {
-  background: var(--msl-purple-950);
+  background-color: var(--msl-purple-950);
   color: rgba(255,255,255,0.78);
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+  background-image:
+    url("../img/decor/rings-light.svg"),
+    url("../img/decor/cricket-ball-light.svg"),
+    url("../img/decor/cricket-ball-light.svg"),
+    radial-gradient(circle, rgba(255, 255, 255, 0.045) 1.2px, transparent 1.5px);
+  background-position:
+    right 6% top 16%, left -110px top -120px, right -80px bottom -130px, 0 0;
+  background-size:
+    280px, 360px, 250px, 26px 26px;
 }
 .bg-dark h1, .bg-dark h2, .bg-dark h3, .bg-dark h4 { color: var(--msl-white); }
 .bg-violet { background: var(--msl-violet-500); color: rgba(255,255,255,0.92); }
@@ -817,6 +846,107 @@ body.nav-open { overflow: hidden; }
 .team-card p { font-size: var(--fs-sm); margin-bottom: 18px; }
 .team-rank-pill { display: inline-block; font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--msl-ink-soft); margin-bottom: 12px; }
 
+/* ==========================================================================
+   Choose Your Team (home) — a BBL-style franchise picker rebuilt in MSL
+   colours: a dark indigo stage with angular, notched logo tiles on the left
+   and an angular photo collage (captains + league crest) on the right.
+   ========================================================================== */
+.choose-team { position: relative; overflow: hidden; }
+.cyt-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(32px, 4vw, 64px);
+  /* Bottom-align so the photo's lower edge sits on the last card row; its 3:2
+     height is tuned (below) to match the 3-row card grid, so the top edge lands
+     on the first row too — the photo reads as part of the team wall. */
+  align-items: end;
+  position: relative;
+  z-index: 1;
+}
+.choose-team .cyt-sub { color: rgba(255,255,255,0.6); margin-top: 12px; max-width: 42ch; }
+
+/* --- Logo tiles --- */
+.cyt-cards {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.cyt-card {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  padding: 18px 16px;
+  min-height: 118px;
+  background: rgba(255,255,255,0.045);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: var(--radius);
+  /* sporty angular notch, bottom-right */
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+  transition: background 0.3s var(--ease), border-color 0.3s var(--ease), transform 0.3s var(--ease);
+}
+.cyt-card:hover { background: rgba(255,255,255,0.1); border-color: var(--msl-lime-400); transform: translateY(-4px); }
+.cyt-card .team-crest { width: 100%; height: 80px; margin: 0; border-radius: 0; }
+.cyt-card .team-crest img { max-width: 100%; max-height: 100%; width: auto; height: auto; border-radius: 0; transition: scale 0.35s var(--ease); }
+.cyt-card .team-crest.is-generated { width: 80px; height: 80px; border-radius: var(--radius); font-size: 1.6rem; }
+/* Icon micro-interaction: crest scales up and wiggles on hover.
+   scale + rotate are set as independent transform properties so the steady
+   scale and the one-shot wiggle don't clobber each other. */
+.cyt-card:hover .team-crest img { scale: 1.22; animation: cyt-wiggle 0.5s var(--ease); }
+@keyframes cyt-wiggle {
+  0%, 100% { rotate: 0deg; }
+  25% { rotate: -7deg; }
+  55% { rotate: 5deg; }
+  80% { rotate: -2deg; }
+}
+
+/* --- Angular photo collage --- */
+.cyt-visual { position: relative; }
+.cyt-collage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/2;
+  overflow: hidden;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%);
+  box-shadow: var(--shadow-pop);
+}
+.cyt-collage-main { width: 100%; height: 100%; object-fit: cover; display: block; transition: scale 0.7s var(--ease); }
+/* Photo wiggle on hover, echoing the about-msl media tilt. The steady scale
+   (1.06) leaves enough overscan that the small rotate never reveals a corner. */
+.cyt-visual:hover .cyt-collage-main { scale: 1.06; animation: cyt-wiggle-img 0.6s var(--ease); }
+@keyframes cyt-wiggle-img {
+  0%, 100% { rotate: 0deg; }
+  35% { rotate: -1.6deg; }
+  70% { rotate: 1.6deg; }
+}
+.cyt-collage::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(10,6,32,0) 42%, rgba(10,6,32,0.88) 100%),
+    linear-gradient(118deg, rgba(91,46,224,0.34) 0%, rgba(91,46,224,0) 46%);
+}
+.cyt-collage-cap {
+  position: absolute; z-index: 2; left: 7%; bottom: 8%;
+  font-family: var(--font-display); font-weight: 900; text-transform: uppercase;
+  font-size: clamp(1.4rem, 1rem + 1.5vw, 2.15rem); line-height: 1; letter-spacing: 0.01em;
+  color: #fff; text-shadow: 0 2px 14px rgba(0,0,0,0.55);
+}
+@media (max-width: 980px) {
+  /* Single column — the photo no longer has a left column to match, so give it
+     back a natural 4:3 frame and centre it. */
+  .cyt-grid { grid-template-columns: 1fr; gap: 44px; align-items: start; }
+  .cyt-visual { max-width: 640px; margin: 0 auto; width: 100%; }
+}
+@media (max-width: 620px) {
+  .cyt-cards { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 400px) {
+  .cyt-cards { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cyt-collage-main, .cyt-card .team-crest img { transition: none; animation: none; }
+  .cyt-visual:hover .cyt-collage-main, .cyt-card:hover .team-crest img { animation: none; }
+}
+
 /* Gallery */
 .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
 .gallery-grid a { position: relative; display: block; aspect-ratio: 1; overflow: hidden; border-radius: var(--radius); }
@@ -834,6 +964,19 @@ body.nav-open { overflow: hidden; }
 .album-card .album-info { padding: 18px 4px 0; }
 .album-card h3 { font-size: 1.3rem; }
 .album-card .news-meta { margin-top: 6px; }
+
+/* Home community section: the album folders (Matchday Actions, Players,
+   Community Day…) shown as compact cover cards instead of loose thumbnails. */
+.album-preview {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+.album-preview .album-card .album-cover { aspect-ratio: 4/3; border-radius: var(--radius); }
+.album-preview .album-card .album-info { padding: 12px 2px 0; }
+.album-preview .album-card h3 { font-size: 1.02rem; }
+.album-preview .album-card .news-meta { color: rgba(255,255,255,0.55); }
 
 /* Lightbox */
 .lightbox { position: fixed; inset: 0; z-index: 500; background: rgba(10,6,32,0.94); display: none; align-items: center; justify-content: center; padding: 32px; }
@@ -855,11 +998,14 @@ body.nav-open { overflow: hidden; }
    Timeline (Our Story)
    ========================================================================== */
 .timeline { position: relative; max-width: 880px; margin: 0 auto; }
-.timeline::before { content: ""; position: absolute; left: 120px; top: 0; bottom: 0; width: 2px; background: var(--msl-line); }
-.timeline-item { position: relative; display: grid; grid-template-columns: 96px 1fr; gap: 32px; padding: 0 0 48px 0; }
+.timeline::before { content: ""; position: absolute; left: 140px; top: 6px; bottom: 6px; width: 2px; background: var(--msl-line); }
+.timeline-item { position: relative; display: grid; grid-template-columns: 110px 1fr; gap: 60px; padding: 0 0 48px 0; }
 .timeline-item:last-child { padding-bottom: 0; }
-.timeline-year { font-family: var(--font-display); font-weight: 900; font-size: 1.1rem; color: var(--msl-violet-500); text-align: right; padding-top: 4px; }
-.timeline-dot { position: absolute; left: 116px; top: 8px; width: 10px; height: 10px; border-radius: 50%; background: var(--msl-lime-400); border: 3px solid var(--msl-cream); box-shadow: 0 0 0 2px var(--msl-violet-500); }
+/* Year, dot and title share one baseline: the year sits on line 1 of the
+   heading, the dot is centred on the rail, and the body clears the dot with
+   real breathing room instead of hugging it. */
+.timeline-year { font-family: var(--font-display); font-weight: 900; font-size: 1.1rem; color: var(--msl-violet-500); text-align: right; line-height: 1.04; padding-top: 3px; }
+.timeline-dot { position: absolute; left: 132px; top: 3px; width: 10px; height: 10px; border-radius: 50%; background: var(--msl-lime-400); border: 3px solid var(--msl-cream); box-shadow: 0 0 0 2px var(--msl-violet-500); }
 .timeline-body h3 { font-size: 1.3rem; margin-bottom: 8px; }
 .timeline-body p { font-size: var(--fs-sm); }
 @media (max-width: 700px) {
@@ -1021,24 +1167,29 @@ select.season-select:hover { border-color: var(--msl-violet-500); }
 }
 .vision-photo-main {
   aspect-ratio: 4/5;
-  width: 82%;
+  width: 64%;
   margin-left: auto;
   box-shadow: var(--shadow-pop);
   z-index: 1;
 }
-.vision-photo-inset {
+/* Scattered satellite tiles ("more pictures, various sizes, like the inset"):
+   each is a cream-bordered, slightly-rotated photo overlapping the main shot,
+   so the block reads like a league highlight wall rather than one flat image. */
+.vision-tile, .vision-photo-inset {
   position: absolute;
-  left: 0; bottom: 0;
-  width: 46%;
-  aspect-ratio: 4/3;
-  z-index: 2;
   border: 6px solid var(--msl-cream);
   box-shadow: var(--shadow-pop);
-  transform: rotate(-3deg);
   transition: transform 0.6s var(--ease);
 }
+.vision-tile--tl   { top: 0;    left: 0;    width: 30%; aspect-ratio: 1/1; transform: rotate(-4deg); z-index: 3; }
+.vision-tile--ml   { top: 34%;  left: -3%;  width: 24%; aspect-ratio: 3/4; transform: rotate(4deg);  z-index: 3; }
+.vision-photo-inset{ bottom: 0; left: 3%;   width: 36%; aspect-ratio: 4/3; transform: rotate(-3deg); z-index: 4; }
+.vision-tile--br   { bottom: 13%; right: -4%; width: 32%; aspect-ratio: 4/3; transform: rotate(5deg); z-index: 5; }
 .vision-media:hover .vision-photo-main img { transform: scale(1.045); }
+.vision-media:hover .vision-tile--tl    { transform: rotate(-2deg)  translateY(-4px); }
+.vision-media:hover .vision-tile--ml    { transform: rotate(2deg)   translateY(-4px); }
 .vision-media:hover .vision-photo-inset { transform: rotate(-1.5deg) translateY(-4px); }
+.vision-media:hover .vision-tile--br    { transform: rotate(3deg)   translateY(-4px); }
 
 /* Angular brand shard peeking behind the top-right corner (echoes the hero) */
 .vision-shard {
@@ -1050,34 +1201,44 @@ select.season-select:hover { border-color: var(--msl-violet-500); }
   clip-path: polygon(22% 0, 100% 0, 100% 66%, 62% 100%, 0 40%);
   transform: skewX(-7deg);
 }
-/* Floating lime chip */
+/* Floating chips — three tags at distinct corners, each gently floating on a
+   staggered delay so they feel alive without competing. */
 .vision-badge {
   position: absolute;
-  z-index: 3;
-  top: 9%; right: 0;
+  z-index: 6;
   background: var(--msl-lime-400);
   color: var(--msl-ink);
   font-family: var(--font-display);
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.02em;
-  font-size: 0.98rem;
-  padding: 11px 17px;
+  font-size: 0.95rem;
+  padding: 10px 16px;
   border-radius: var(--radius);
   box-shadow: var(--shadow-pop);
   animation: vision-float 4.5s var(--ease) infinite;
 }
+.vision-badge            { top: 2%;  right: 0; }                 /* Community Driven (lime) */
+.vision-badge--violet    { top: 30%; left: -4%; right: auto; background: var(--msl-violet-500); color: #fff; animation-delay: 1.2s; }
+.vision-badge--elite     { top: auto; bottom: 4%; right: 6%; background: var(--msl-white); color: var(--msl-violet-500); box-shadow: var(--shadow-pop), inset 0 0 0 2px currentColor; animation-delay: 0.6s; }
 @keyframes vision-float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-9px); }
 }
 @media (prefers-reduced-motion: reduce) {
   .vision-badge { animation: none; }
-  .vision-photo img, .vision-photo-inset { transition: none; }
+  .vision-photo img, .vision-tile, .vision-photo-inset { transition: none; }
 }
 @media (max-width: 900px) {
   .vision-grid { grid-template-columns: 1fr; gap: 44px; }
-  .vision-media { padding: 4% 6% 6% 0; max-width: 520px; }
+  .vision-media { padding: 4% 6% 6% 0; max-width: 560px; }
+  /* Keep the mobile composition uncluttered: primary + one satellite + inset */
+  .vision-photo-main { width: 68%; }
+  .vision-tile--ml, .vision-tile--br { display: none; }
+  .vision-tile--tl { width: 34%; }
+  .vision-photo-inset { width: 42%; }
+  .vision-badge--violet { top: 24%; }
+  .vision-badge--elite { bottom: 6%; right: 2%; }
 }
 @media (max-width: 460px) {
   .vision-stat { padding: 18px 12px; }
@@ -1177,8 +1338,10 @@ select.season-select:hover { border-color: var(--msl-violet-500); }
    ========================================================================== */
 .site-footer { background: var(--msl-purple-950); color: rgba(255,255,255,0.6); padding: 80px 0 0; }
 .footer-top { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.1fr; gap: 48px; padding-bottom: 56px; border-bottom: 1px solid var(--msl-line-dark); }
-.footer-brand .brand { margin-bottom: 18px; }
-.footer-brand p { font-size: var(--fs-sm); max-width: 34ch; }
+/* Brand column: logo, tagline and socials centred as a stack. */
+.footer-brand { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.footer-brand .brand { margin-bottom: 18px; justify-content: center; }
+.footer-tagline { font-size: var(--fs-sm); max-width: 46ch; line-height: 1.7; letter-spacing: 0.02em; }
 .footer-col h5 { color: #fff; font-size: var(--fs-sm); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 18px; }
 .footer-col ul { display: grid; gap: 12px; }
 .footer-col a { font-size: var(--fs-sm); transition: color 0.25s var(--ease); }
@@ -1186,7 +1349,14 @@ select.season-select:hover { border-color: var(--msl-violet-500); }
 .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding: 26px 0; font-size: var(--fs-xs); flex-wrap: wrap; gap: 12px; }
 .footer-bottom a:hover { color: var(--msl-lime-400); }
 @media (max-width: 980px) { .footer-top { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 600px) { .footer-top { grid-template-columns: 1fr; gap: 36px; } }
+@media (max-width: 600px) {
+  .footer-top { grid-template-columns: 1fr; gap: 36px; }
+  /* Centre the brand block on phones and keep the tagline to two tidy lines */
+  .footer-brand { text-align: center; }
+  .footer-brand .brand { justify-content: center; }
+  .footer-tagline { margin-inline: auto; font-size: 0.78rem; }
+  .footer-brand .social-row { justify-content: center; }
+}
 
 /* ==========================================================================
    Misc: empty states, pagination, back-to-top
