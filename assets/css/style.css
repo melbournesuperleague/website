@@ -364,6 +364,19 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
    every breakpoint — the hamburger isn't a mobile-only fallback here, it's
    always the way into the offcanvas panel, same as the reference site. */
 .header-actions { display: flex; align-items: center; gap: 20px; }
+/* Facebook + Instagram in the header, sitting just left of the CTA. They
+   hide at the same breakpoint as the CTA — the offcanvas panel already
+   carries the social row on mobile, and the small-screen header only has
+   room for logo + hamburger. */
+.header-socials { display: flex; align-items: center; gap: 10px; }
+.header-socials a {
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  transition: transform 0.25s var(--ease), filter 0.25s var(--ease);
+}
+.header-socials svg { width: 19px; height: 19px; }
+.header-socials a:hover { transform: translateY(-2px); filter: brightness(1.12); }
 /* Header CTA sized to Nitro's theme-btn: 58px tall, 34px horizontal pad,
    16px/700 uppercase — a prominent bar, not a small pill. Overrides the
    default .btn-sm treatment carried in the markup. */
@@ -387,6 +400,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 @media (max-width: 1100px) {
   .nav-primary { display: none; }
   .header-actions .btn-primary { display: none; }
+  .header-socials { display: none; }
 }
 
 /* ---- Offcanvas side panel (hamburger target) ----
@@ -1367,6 +1381,28 @@ select.season-select:hover { border-color: var(--msl-violet-500); }
 .social-row a { width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; color: #fff; transition: all 0.25s var(--ease); }
 .social-row a:hover { background: var(--msl-lime-400); color: var(--msl-ink); border-color: var(--msl-lime-400); }
 .social-row svg { width: 18px; height: 18px; }
+/* Official brand colours for the Facebook/Instagram buttons — header,
+   footer and offcanvas alike. Hover keeps the brand identity (lift +
+   brighten) instead of the lime swap used by generic social buttons. */
+.social-row a[data-contact-facebook],
+.header-socials a[data-contact-facebook] {
+  background: #1877f2;
+  border-color: transparent;
+}
+.social-row a[data-contact-instagram],
+.header-socials a[data-contact-instagram] {
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
+  border-color: transparent;
+}
+.social-row a[data-contact-facebook]:hover,
+.social-row a[data-contact-instagram]:hover {
+  color: #fff; border-color: transparent;
+  background: #1877f2;
+  transform: translateY(-2px); filter: brightness(1.12);
+}
+.social-row a[data-contact-instagram]:hover {
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
+}
 
 /* ==========================================================================
    Footer
