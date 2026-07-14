@@ -122,20 +122,62 @@
   observeReveal();
   window.MSLReveal = { observe: observeReveal };
 
+  // Safety net for the reveals: some mobile in-app browsers (Instagram,
+  // Facebook, etc.) throttle IntersectionObserver so hard that below-the-fold
+  // elements never receive an entry — leaving whole sections stuck at
+  // opacity:0. This passive scroll sweep shows any bound-but-hidden reveal
+  // that has scrolled into view. When IO is healthy it fires first and the
+  // sweep finds nothing to do. setTimeout (not rAF) on purpose: rAF is
+  // paused in exactly the throttled contexts this exists for.
+  let revealSweepQueued = false;
+  function sweepReveals() {
+    revealSweepQueued = false;
+    document
+      .querySelectorAll(".reveal[data-reveal-bound]:not(.is-visible), .reveal-fade[data-reveal-bound]:not(.is-visible)")
+      .forEach((el) => {
+        const r = el.getBoundingClientRect();
+        // Mirror the observer's trigger zone (bottom 40px excluded) so the
+        // sweep never pre-empts a healthy observer.
+        if (r.top < window.innerHeight - 40 && r.bottom > 0) el.classList.add("is-visible");
+      });
+  }
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!revealSweepQueued) {
+        revealSweepQueued = true;
+        setTimeout(sweepReveals, 150);
+      }
+    },
+    { passive: true }
+  );
+
   // ---- Counter-up (stat numbers count from 0 when scrolled into view) ----
+  // The trigger zone excludes the bottom quarter of the viewport: a bare
+  // threshold used to fire the instant the number clipped the screen edge,
+  // so on a fast mobile flick the 1.4s count had already finished before the
+  // stat was ever actually seen. Counters also replay on re-entry (matching
+  // the scroll reveals) instead of unobserving after one run — whenever you
+  // scroll to them, you see them count.
   const counterEls = document.querySelectorAll("[data-counter]");
   if (counterEls.length) {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const counterSuffix = (el) => el.getAttribute("data-counter-suffix") || "";
+    const setFinal = (el) => {
+      const target = parseFloat(el.getAttribute("data-counter"));
+      el.textContent = (Number.isNaN(target) ? el.textContent : target.toLocaleString()) + (Number.isNaN(target) ? "" : counterSuffix(el));
+    };
     const runCounter = (el) => {
       const target = parseFloat(el.getAttribute("data-counter"));
-      const suffix = el.getAttribute("data-counter-suffix") || "";
-      if (prefersReducedMotion || Number.isNaN(target)) {
-        el.textContent = target.toLocaleString() + suffix;
-        return;
-      }
+      const suffix = counterSuffix(el);
+      if (prefersReducedMotion || Number.isNaN(target)) { setFinal(el); return; }
       const duration = 1400;
       const start = performance.now();
+      // Token lets a re-entry (or the off-screen reset) cancel a running count
+      // so two rAF loops never fight over the same element.
+      const token = (el.__mslCountToken = start);
       function tick(now) {
+        if (el.__mslCountToken !== token) return;
         const p = Math.min((now - start) / duration, 1);
         const eased = 1 - Math.pow(1 - p, 3);
         el.textContent = Math.round(target * eased).toLocaleString() + suffix;
@@ -143,21 +185,24 @@
       }
       requestAnimationFrame(tick);
     };
-    if ("IntersectionObserver" in window) {
+    if ("IntersectionObserver" in window && !prefersReducedMotion) {
       const counterIO = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
               runCounter(entry.target);
-              counterIO.unobserve(entry.target);
+            } else {
+              // Reset while fully off-screen so the next entry replays from 0.
+              entry.target.__mslCountToken = null;
+              entry.target.textContent = "0" + counterSuffix(entry.target);
             }
           });
         },
-        { threshold: 0.5 }
+        { threshold: 0.5, rootMargin: "0px 0px -25% 0px" }
       );
       counterEls.forEach((el) => counterIO.observe(el));
     } else {
-      counterEls.forEach(runCounter);
+      counterEls.forEach((el) => (prefersReducedMotion ? setFinal(el) : runCounter(el)));
     }
   }
 
@@ -182,6 +227,9 @@
       })
       .join(" ");
     requestAnimationFrame(() => requestAnimationFrame(() => heroTitle.classList.add("is-revealed")));
+    // Backstop for contexts where rAF is throttled/paused (in-app browsers,
+    // prerendered tabs): without it the headline would stay invisible forever.
+    setTimeout(() => heroTitle.classList.add("is-revealed"), 600);
   }
 
   // ---- Hero visual mouse-tilt (desktop only, mirrors Nitro's cursor-tilt) ----

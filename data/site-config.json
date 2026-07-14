@@ -6,6 +6,8 @@
   "tagline": "Where Communities Unite. Talent Thrives. Legacies Begin.",
   "foundedYear": 2021,
   "defaultSeason": "2025",
+  "_heroRotatingCutoutsComment": "true = the home hero cycles through every image in assets/img/hero/cutouts/ (drop images in, run `node scripts/generate-manifests.mjs`, done). false = the single static assets/img/hero/hero-cutout.png.",
+  "heroRotatingCutouts": false,
   "cricheroes": {
     "tournamentName": "MSL Premiers 2025",
     "tournamentId": "1729194",

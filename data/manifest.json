@@ -207,6 +207,11 @@
     "assets/img/gallery/players/101.webp",
     "assets/img/gallery/players/102.webp"
   ],
+  "assets/img/hero/cutouts": [
+    "assets/img/hero/cutouts/cutout-01.webp",
+    "assets/img/hero/cutouts/cutout-02.webp",
+    "assets/img/hero/cutouts/cutout-03.webp"
+  ],
   "__teamLogos": {
     "auscon-melbourne-united": "assets/img/teams/auscon-melbourne-united.png",
     "aussie-kings": "assets/img/teams/aussie-kings.png",
@@ -223,5 +228,5 @@
     "sydney-title-club": "assets/img/teams/sydney-title-club.png",
     "westside-falcons": "assets/img/teams/westside-falcons.png"
   },
-  "__generatedAt": "2026-07-14T00:03:52.108Z"
+  "__generatedAt": "2026-07-14T04:33:19.010Z"
 }

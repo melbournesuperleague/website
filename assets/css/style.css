@@ -663,6 +663,37 @@ body.nav-open { overflow: hidden; }
   height: clamp(380px, 108vw, 520px); width: auto;
   filter: drop-shadow(0 24px 48px rgba(10, 6, 32, 0.55));
 }
+/* Rotating cutouts (siteConfig.heroRotatingCutouts) — home.js stacks every
+   player image in the same grid cell and cycles them. Grid stacking (not
+   position:absolute) keeps the wrapper sized by its imgs, so the existing
+   auto-margin centring and bottom-anchoring keep working untouched, and the
+   mouse-tilt transform on the wrapper stays free — entrance/exit transforms
+   live on the imgs themselves. */
+.hero-visual-photo.is-rotator {
+  display: grid;
+  justify-items: center;
+  align-items: end;
+}
+.hero-visual-photo.is-rotator img {
+  grid-area: 1 / 1;
+  opacity: 0;
+  transform: translateY(7%) rotate(2.5deg) scale(0.97);
+  transform-origin: bottom center;
+  transition: opacity 0.9s var(--ease), transform 1s var(--ease);
+  will-change: opacity, transform;
+}
+.hero-visual-photo.is-rotator img.is-active {
+  opacity: 1;
+  transform: none;
+}
+/* Outgoing player drifts up-and-away slightly faster than the incoming one
+   rises, so mid-swap reads as a handoff rather than a double-exposure. */
+.hero-visual-photo.is-rotator img.is-leaving {
+  opacity: 0;
+  transform: translateY(-4%) rotate(-1.5deg) scale(1.02);
+  transition: opacity 0.6s ease, transform 0.7s ease;
+}
+
 @media (min-width: 992px) {
   /* The visual group's right edge aligns to the 1720px hero container's
      right gutter (max(24px, (100vw-1720px)/2)) instead of the raw viewport
@@ -728,6 +759,10 @@ body.nav-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .hero-title .word { opacity: 1; transform: none; transition: none; }
   .hero-visual-photo { transition: none; }
+  /* home.js also stops cycling under reduced motion — this just guarantees
+     the one visible cutout never slides even during the initial handoff. */
+  .hero-visual-photo.is-rotator img { transition: none; transform: none; }
+  .hero-visual-photo.is-rotator img:not(.is-active) { opacity: 0; }
   .hero-scroll svg { animation: none; }
 }
 

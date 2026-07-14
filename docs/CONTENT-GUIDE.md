@@ -158,7 +158,9 @@ To remove an article, delete its object from `news.json` (you can leave the phot
 
 ## 9. How the "auto photo pickup" actually works
 
-Because this is a fully static site (no server, no database), the browser can't "look inside a folder" on its own. So `scripts/generate-manifests.mjs` does it for you ahead of time: it scans every folder under `assets/img/news/` and `assets/img/gallery/`, plus `assets/img/teams/`, and writes the result to `data/manifest.json`. The website reads that file to know which photos exist.
+Because this is a fully static site (no server, no database), the browser can't "look inside a folder" on its own. So `scripts/generate-manifests.mjs` does it for you ahead of time: it scans every folder under `assets/img/news/` and `assets/img/gallery/`, plus `assets/img/teams/` and `assets/img/hero/cutouts/`, and writes the result to `data/manifest.json`. The website reads that file to know which photos exist.
+
+**Rotating hero players (home page).** Drop transparent-background player images (PNG or WebP) into `assets/img/hero/cutouts/` and regenerate the manifest — the home hero will animate through all of them, one by one, in filename order. Portrait images around 1400–1700px tall work best (they're auto-scaled to the hero's height either way). The switch lives in `data/site-config.json`: set `"heroRotatingCutouts": true` for the rotation, or `false` to show the single classic `assets/img/hero/hero-cutout.png` instead.
 
 **You only need to remember one thing: after adding/removing photos, the manifest needs to be regenerated.** Two ways this happens:
 

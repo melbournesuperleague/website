@@ -1,5 +1,5 @@
 import {
-  getTeams, getManifest, getNews, getGallery, getSeasonsIndex, loadPointsTable, loadLeaderboards,
+  getSiteConfig, getTeams, getManifest, getNews, getGallery, getSeasonsIndex, loadPointsTable, loadLeaderboards,
   getDefaultSeasonId, teamCrestHTML, miniCrestHTML, formatDate, standingsGroups,
 } from "../data.js";
 
@@ -26,6 +26,101 @@ const previewColumns = {
     row: (p) => [`<strong>${p.total.toFixed(2)}</strong>`, p.mat],
   },
 };
+
+/* Hero cutout rotator — when siteConfig.heroRotatingCutouts is true, cycles
+   through every transparent player image found in assets/img/hero/cutouts/
+   (listed in data/manifest.json by scripts/generate-manifests.mjs — drop a
+   new image in the folder, re-run the script, and it joins the rotation).
+   When the flag is false, or the folder is empty, or the JSON fails to load,
+   the static hero-cutout.png already in the HTML stays untouched. */
+async function initHeroRotator() {
+  const wrap = document.querySelector(".hero-visual-photo");
+  if (!wrap) return;
+
+  let config, mf;
+  try {
+    [config, mf] = await Promise.all([getSiteConfig(), getManifest()]);
+  } catch {
+    return; // static cutout stays
+  }
+  const sources = mf["assets/img/hero/cutouts"] || [];
+  if (!config.heroRotatingCutouts || !sources.length) return;
+
+  const loadImg = (src) =>
+    new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.alt = "A Melbourne Super League player";
+      img.decoding = "async";
+      img.src = src;
+    });
+
+  // The first rotation image is fully loaded BEFORE the static cutout is
+  // swapped out, so the hero never shows an empty gap mid-handoff.
+  let first;
+  try {
+    first = await loadImg(sources[0]);
+  } catch {
+    return;
+  }
+
+  const staticImg = wrap.querySelector("img");
+  // Mark the existing static image active first so flipping the wrapper to
+  // grid-stacked rotator mode doesn't blink it to opacity 0 for a frame.
+  if (staticImg) staticImg.classList.add("is-active");
+  wrap.classList.add("is-rotator");
+  wrap.appendChild(first);
+
+  const SWAP_MS = 1000; // matches the CSS transition duration below
+  const imgs = [first];
+  let idx = 0;
+
+  const activate = (incoming, outgoing) => {
+    if (outgoing) {
+      outgoing.classList.remove("is-active");
+      outgoing.classList.add("is-leaving");
+      setTimeout(() => outgoing.classList.remove("is-leaving"), SWAP_MS);
+    }
+    void incoming.offsetWidth; // commit the appended img's hidden state so the entrance transitions
+    incoming.classList.add("is-active");
+  };
+
+  // Double-rAF: the entrance transition needs the img painted in its
+  // hidden state for at least one frame (same trick as the hero title).
+  requestAnimationFrame(() =>
+    requestAnimationFrame(() => {
+      activate(first, staticImg);
+      if (staticImg) setTimeout(() => staticImg.remove(), SWAP_MS + 100);
+    })
+  );
+
+  // Auto-carousels are exactly what reduced-motion users opt out of — they
+  // get the first cutout as a static hero. One image needs no cycling either.
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (sources.length < 2 || reduceMotion) return;
+
+  const ROTATE_MS = 5000;
+  let busy = false;
+  setInterval(async () => {
+    if (document.hidden || busy) return; // don't queue swaps in a background tab
+    busy = true;
+    const nextIdx = (idx + 1) % sources.length;
+    let next = imgs[nextIdx];
+    if (!next) {
+      try {
+        next = imgs[nextIdx] = await loadImg(sources[nextIdx]);
+      } catch {
+        busy = false;
+        return; // skip this tick; retry the same image next interval
+      }
+      wrap.appendChild(next);
+    }
+    activate(next, imgs[idx]);
+    idx = nextIdx;
+    setTimeout(() => (busy = false), SWAP_MS);
+  }, ROTATE_MS);
+}
 
 async function init() {
   [teams, manifest] = await Promise.all([getTeams(), getManifest()]);
@@ -195,3 +290,4 @@ function renderLeaderboardPreview(leaderboards) {
 }
 
 init();
+initHeroRotator();

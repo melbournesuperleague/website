@@ -63,6 +63,12 @@ for (const slug of listSubfolders(galleryRoot)) {
   manifest[relFolder] = listImages(join(galleryRoot, slug)).map((f) => `${relFolder}/${f}`);
 }
 
+// --- Hero cutouts: assets/img/hero/cutouts/ — transparent player PNGs/WebPs
+//     rotated through the home hero when siteConfig.heroRotatingCutouts is true.
+//     Drop images in, re-run this script, done. ---
+const heroCutoutsFolder = "assets/img/hero/cutouts";
+manifest[heroCutoutsFolder] = listImages(join(ROOT, heroCutoutsFolder)).map((f) => `${heroCutoutsFolder}/${f}`);
+
 // --- Team logos: assets/img/teams/<slug>.<ext> (flat, not a folder) ---
 const teamsRoot = join(ROOT, "assets/img/teams");
 const teamLogos = {};
